@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, WheelEvent } from 'react';
 import type { CoverConfig } from '../types';
 import { gradientPresets, geometricPatterns } from '../types';
-import { Terminal, Cpu } from 'lucide-react';
+import { Terminal, Cpu, Code, Database, Cloud, Layers, Package, Settings, Brush } from 'lucide-react';
 
 interface PreviewProps {
     config: CoverConfig;
@@ -245,6 +245,13 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
         const alignClass = getAlignmentClass();
         const titleClass = getTitleSize();
         const themeStyles = getThemeStyles(titleClass);
+        // 获取当前选中的图标组件，如果没有选中则随机选择一个
+        const getRandomIcon = () => {
+            const iconKeys = Object.keys(iconMap);
+            const randomKey = iconKeys[Math.floor(Math.random() * iconKeys.length)];
+            return iconMap[randomKey as keyof typeof iconMap];
+        };
+        const IconComponent = config.iconType && iconMap[config.iconType] ? iconMap[config.iconType] : getRandomIcon();
         
         return (
             <div className={`h-full flex flex-col justify-between relative z-10 ${alignClass} ${themeStyles.container}`}>
@@ -253,7 +260,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                 <div className="w-full flex justify-between items-start">
                     {showIcon && (
                         <div className={themeStyles.header}>
-                            <Terminal size={20} className="xs:size-12 sm:size-12 md:size-12 lg:size-12" />
+                            <Terminal size={32} />
                         </div>
                     )}
                     {showDecoration && (
@@ -279,28 +286,32 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
                 {/* Footer / Author */}
                 <div className={themeStyles.footer}>
-                    {showAuthor && (
-                        <div className={themeStyles.authorContainer}>
-                            {themeStyles.authorAvatar !== 'hidden' && (
-                                <div className={`${themeStyles.authorAvatar} w-6 h-6 text-xs sm:w-8 sm:h-8 sm:text-sm md:w-10 md:h-10 md:text-lg lg:w-12 lg:h-12 lg:text-xl`}>
-                                    {author.charAt(0)}
+                    <div className="w-full flex justify-between items-end">
+                        <div>
+                            {showAuthor && (
+                                <div className={themeStyles.authorContainer}>
+                                    {themeStyles.authorAvatar !== 'hidden' && (
+                                        <div className={`${themeStyles.authorAvatar} w-6 h-6 text-xs sm:w-8 sm:h-8 sm:text-sm md:w-10 md:h-10 md:text-lg lg:w-12 lg:h-12 lg:text-xl`}>
+                                            {author.charAt(0)}
+                                        </div>
+                                    )}
+                                    <div className="flex flex-col">
+                                        <span className={`${themeStyles.authorLabel} text-[0.6rem] xs:text-xs sm:text-sm md:text-base`}>Author</span>
+                                        <span className={`${themeStyles.authorName} text-center text-xs xs:text-sm sm:text-base md:text-lg`}>
+                                            {author}
+                                        </span>
+                                    </div>
                                 </div>
                             )}
-                            <div className="flex flex-col">
-                                <span className={`${themeStyles.authorLabel} text-[0.6rem] xs:text-xs sm:text-sm md:text-base`}>Author</span>
-                                <span className={`${themeStyles.authorName} text-xs xs:text-sm sm:text-base md:text-lg`}>
-                                    {author}
-                                </span>
+                        </div>
+                        {showDecoration && themeStyles.decorationIcon !== 'hidden' && (
+                            <div className={themeStyles.decorationIcon}>
+                                <IconComponent size={36} />
                             </div>
-                        </div>
-                    )}
-
-                    {showDecoration && themeStyles.decorationIcon !== 'hidden' && (
-                        <div className={themeStyles.decorationIcon}>
-                            <Cpu size={16} className="xs:size-12 sm:size-12 md:size-12 lg:size-12" />
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
+
             </div>
         );
     };
@@ -329,3 +340,15 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 });
 
 Preview.displayName = 'Preview';
+
+// 在文件中添加图标映射
+const iconMap = {
+  brush: Brush,
+  cpu: Cpu,
+  code: Code,
+  database: Database,
+  cloud: Cloud,
+  layers: Layers,
+  package: Package,
+  settings: Settings
+};

@@ -157,6 +157,7 @@ function App() {
     const themes: CoverConfig['theme'][] = ['modern', 'classic', 'bold', 'minimal'];
     const patterns: CoverConfig['pattern'][] = ['none', 'dots', 'lines', 'waves', 'grid', 'triangles'];
     const gradientPresets: CoverConfig['gradientPreset'][] = ['custom', 'sunset', 'ocean', 'forest', 'candy', 'aurora', 'flame'];
+    const iconTypes: CoverConfig['iconType'][] = ['brush', 'cpu', 'code', 'database', 'cloud', 'layers', 'package', 'settings']; // 添加图标类型数组
     const colors = [
       { bg: '#000000', text: '#ffffff' },
       { bg: '#ffffff', text: '#000000' },
@@ -172,7 +173,13 @@ function App() {
     const randomPattern = patterns[Math.floor(Math.random() * patterns.length)];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const randomGradientPreset = gradientPresets[Math.floor(Math.random() * gradientPresets.length)];
+    const randomIconType = iconTypes[Math.floor(Math.random() * iconTypes.length)]; // 添加随机图标类型选择
     const isGradient = Math.random() > 0.7; // 30% chance of gradient
+    
+    // 随机设置显示选项
+    const showAuthor = Math.random() > 0.3; // 70% chance to show author
+    const showIcon = Math.random() > 0.3; // 70% chance to show icon
+    const showDecoration = Math.random() > 0.3; // 70% chance to show decoration
 
     setConfig(prev => ({
       ...prev,
@@ -182,6 +189,10 @@ function App() {
       textColor: randomColor.text,
       backgroundType: isGradient ? 'gradient' : 'solid',
       gradientPreset: isGradient ? randomGradientPreset : 'custom',
+      iconType: randomIconType, // 添加图标类型设置
+      showAuthor,
+      showIcon,
+      showDecoration,
     }));
   };
 

@@ -15,9 +15,17 @@ import {
     ZoomIn,
     ZoomOut,
     RotateCcw,
+    Cpu,
+    Code,
+    Database,
+    Cloud,
+    Layers,
+    Package,
+    Settings,
+    Brush,
 } from 'lucide-react';
 import type { CoverConfig } from '../types';
-import { t } from '../utils/i18n';
+import { t, type TranslationKey } from '../utils/i18n';
 import type { Language } from '../utils/i18n';
 import { appThemes, type AppTheme } from '../types/theme';
 
@@ -66,21 +74,145 @@ export const Controls: React.FC<ControlsProps> = ({
     };
 
     const {
-        title,
-        subtitle,
-        author,
-        titleAlignment,
-        titleSize,
-        backgroundType,
         backgroundColor,
-        theme,
+        pattern,
         aspectRatio,
+        backgroundType,
+        gradientPreset,
+        theme,
         showAuthor,
         showIcon,
         showDecoration,
-        pattern,
-        gradientPreset,
     } = config;
+
+    const renderGeneralTab = () => {
+        // 在函数内部解构所需的变量
+        const {
+            title,
+            subtitle,
+            author,
+            titleAlignment,
+            titleSize,
+            showIcon,
+            iconType,
+        } = config;
+
+        return (
+            <div className="space-y-5">
+                <div className="space-y-3">
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                        {t('label.textContent', currentLang)}
+                    </label>
+                    <div className="space-y-3">
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => handleChange('title', e.target.value)}
+                            placeholder={t('placeholder.title', currentLang)}
+                            className={`w-full ${appTheme.input} rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        />
+                        <input
+                            type="text"
+                            value={subtitle}
+                            onChange={(e) => handleChange('subtitle', e.target.value)}
+                            placeholder={t('placeholder.subtitle', currentLang)}
+                            className={`w-full ${appTheme.input} rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        />
+                        <input
+                            type="text"
+                            value={author}
+                            onChange={(e) => handleChange('author', e.target.value)}
+                            placeholder={t('placeholder.author', currentLang)}
+                            className={`w-full ${appTheme.input} rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        />
+                    </div>
+                </div>
+
+                {/* Typography Section */}
+                <div className="space-y-3">
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                        {t('label.typography', currentLang)}
+                    </label>
+                    <div className="space-y-3">
+                        <div className="grid grid-cols-3 gap-1 xs:gap-2">
+                            {['left', 'center', 'right'].map((align) => (
+                                <button
+                                    key={align}
+                                    onClick={() => handleChange('titleAlignment', align as CoverConfig['titleAlignment'])}
+                                    className={`flex-1 p-1.5 rounded xs:p-2 sm:p-2.5 flex items-center justify-center transition-all duration-200 transform ${titleAlignment === align
+                                        ? `${appTheme.active} shadow-md scale-[1.05]`
+                                        : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/50 hover:scale-[1.02]'}`}
+                                >
+                                    {align === 'left' && <AlignLeft size={14} className="xs:size-16" />}
+                                    {align === 'center' && <AlignCenter size={14} className="xs:size-16" />}
+                                    {align === 'right' && <AlignRight size={14} className="xs:size-16" />}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="grid grid-cols-3 gap-1 xs:gap-2">
+                            {['small', 'medium', 'large'].map((size) => (
+                                <button
+                                    key={size}
+                                    onClick={() => handleChange('titleSize', size as CoverConfig['titleSize'])}
+                                    className={`px-2 py-1.5 rounded border transition-colors duration-150 text-xs xs:text-sm ${
+                                        titleSize === size
+                                            ? 'bg-white/15 text-white font-medium border-white/20'
+                                            : 'text-white/70 border-white/10 bg-white/5 hover:bg-white/10 hover:text-white'
+                                    }`}
+                                >
+                                    {t(`size.${size}` as TranslationKey, currentLang)}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Icon Type Selection */}
+                {showIcon && (
+                    <div className="space-y-3">
+                        <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                            装饰图标类型
+                        </label>
+                        <div className="grid grid-cols-4 gap-2">
+                            {[
+                                { type: 'brush', label: '画笔' },
+                                { type: 'cpu', label: 'CPU' },
+                                { type: 'code', label: '代码' },
+                                { type: 'database', label: '数据库' },
+                                { type: 'cloud', label: '云' },
+                                { type: 'layers', label: '图层' },
+                                { type: 'package', label: '包' },
+                                { type: 'settings', label: '设置' }
+                            ].map((icon) => (
+                                <button
+                                    key={icon.type}
+                                    onClick={() => handleChange('iconType', icon.type as CoverConfig['iconType'])}
+                                    className={`flex flex-col items-center justify-center p-2 rounded border transition-all duration-200 ${
+                                        iconType === icon.type
+                                            ? `${appTheme.active} shadow-md`
+                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
+                                    }`}
+                                >
+                                    <div className="mb-1">
+                                        {icon.type === 'brush' && <Brush size={20} />}
+                                        {icon.type === 'cpu' && <Cpu size={20} />}
+                                        {icon.type === 'code' && <Code size={20} />}
+                                        {icon.type === 'database' && <Database size={20} />}
+                                        {icon.type === 'cloud' && <Cloud size={20} />}
+                                        {icon.type === 'layers' && <Layers size={20} />}
+                                        {icon.type === 'package' && <Package size={20} />}
+                                        {icon.type === 'settings' && <Settings size={20} />}
+                                    </div>
+                                    <span className="text-xs">{icon.label}</span>
+                                </button>
+                            ))}
+
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     return (
         <div className={`flex flex-col h-full ${appTheme.sidebar} ${appTheme.text} glass-effect`}>
@@ -124,72 +256,7 @@ export const Controls: React.FC<ControlsProps> = ({
             <div className="flex-1 overflow-y-auto p-2 xs:p-4 sm:p-6 space-y-4 xs:space-y-6 custom-scrollbar">
 
                 {/* General Tab */}
-                {activeTab === 'general' && (
-                    <div className="space-y-5">
-                        <div className="space-y-3">
-                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.textContent', currentLang)}</label>
-                            <div className="space-y-3">
-                                <input
-                                    type="text"
-                                    value={title}
-                                    onChange={(e) => handleChange('title', e.target.value)}
-                                    placeholder={t('placeholder.title', currentLang)}
-                                    className={`${appTheme.input} input-focus-animate text-sm sm:text-base`}
-                                />
-                                <input
-                                    type="text"
-                                    value={subtitle}
-                                    onChange={(e) => handleChange('subtitle', e.target.value)}
-                                    placeholder={t('placeholder.subtitle', currentLang)}
-                                    className={`${appTheme.input} input-focus-animate text-sm sm:text-base`}
-                                />
-                                <input
-                                    type="text"
-                                    value={author}
-                                    onChange={(e) => handleChange('author', e.target.value)}
-                                    placeholder={t('placeholder.author', currentLang)}
-                                    className={`${appTheme.input} input-focus-animate text-sm sm:text-base`}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.typography', currentLang)}</label>
-                            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3">
-                                <div className={`${appTheme.sidebar} rounded p-1 flex shadow-sm ${appTheme.buttonBorder}`}>
-                                    {['left', 'center', 'right'].map((align) => (
-                                        <button
-                                            key={align}
-                                            onClick={() => handleChange('titleAlignment', align as any)}
-                                            className={`flex-1 p-1.5 rounded xs:p-2 sm:p-2.5 flex items-center justify-center transition-all duration-200 transform ${titleAlignment === align
-                                                ? `${appTheme.active} shadow-md scale-[1.05]`
-                                                : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/50 hover:scale-[1.02]'}`}
-                                        >
-                                            {align === 'left' && <AlignLeft size={14} className="xs:size-16" />}
-                                            {align === 'center' && <AlignCenter size={14} className="xs:size-16" />}
-                                            {align === 'right' && <AlignRight size={14} className="xs:size-16" />}
-                                        </button>
-                                    ))}
-                                </div>
-                                <div className="grid grid-cols-3 gap-1 xs:gap-2">
-                                    {['small', 'medium', 'large'].map((size) => (
-                                        <button
-                                            key={size}
-                                            onClick={() => handleChange('titleSize', size as any)}
-                                            className={`px-2 py-1.5 rounded border transition-colors duration-150 text-xs xs:text-sm ${
-                                                titleSize === size
-                                                    ? 'bg-white/15 text-white font-medium border-white/20'
-                                                    : 'text-white/70 border-white/10 bg-white/5 hover:bg-white/10 hover:text-white'
-                                            }`}
-                                        >
-                                            {t(`size.${size}` as any, currentLang)}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                {activeTab === 'general' && renderGeneralTab()}
 
                 {/* Style Tab */}
                 {activeTab === 'style' && (
@@ -200,13 +267,13 @@ export const Controls: React.FC<ControlsProps> = ({
                                 {['solid', 'gradient', 'pattern', 'image'].map((type) => (
                                     <button
                                         key={type}
-                                        onClick={() => handleChange('backgroundType', type as any)}
+                                        onClick={() => handleChange('backgroundType', type as CoverConfig['backgroundType'])}
                                         className={`px-4 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${backgroundType === type
                                             ? `${appTheme.active} shadow-lg scale-[1.02] border-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`
                                             : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                             }`}
                                     >
-                                        {t(`bg.${type}` as any, currentLang)}
+                                        {t(`bg.${type}` as TranslationKey, currentLang)}
                                     </button>
                                 ))}
                             </div>
@@ -237,13 +304,13 @@ export const Controls: React.FC<ControlsProps> = ({
                                                 {['custom', 'sunset', 'ocean', 'forest', 'candy', 'aurora', 'flame'].map((preset) => (
                                                     <button
                                                         key={preset}
-                                                        onClick={() => handleChange('gradientPreset', preset as any)}
+                                                        onClick={() => handleChange('gradientPreset', preset as CoverConfig['gradientPreset'])}
                                                         className={`px-3 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${gradientPreset === preset
                                                             ? `${appTheme.active} shadow-lg scale-[1.02]`
                                                             : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                                             }`}
                                                     >
-                                                        {t(`gradient.${preset}` as any, currentLang)}
+                                                        {t(`gradient.${preset}` as TranslationKey, currentLang)}
                                                     </button>
                                                 ))}
                                             </div>
@@ -274,13 +341,13 @@ export const Controls: React.FC<ControlsProps> = ({
                                     {['none', 'dots', 'lines', 'waves', 'grid', 'triangles'].map((p) => (
                                         <button
                                             key={p}
-                                            onClick={() => handleChange('pattern', p as any)}
+                                            onClick={() => handleChange('pattern', p as CoverConfig['pattern'])}
                                             className={`px-3 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${pattern === p
                                                 ? `${appTheme.active} shadow-lg scale-[1.02]`
                                                 : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                                 }`}
                                         >
-                                            {t(`pattern.${p}` as any, currentLang)}
+                                            {t(`pattern.${p}` as TranslationKey, currentLang)}
                                         </button>
                                     ))}
                                 </div>
@@ -294,13 +361,13 @@ export const Controls: React.FC<ControlsProps> = ({
                                 {['modern', 'classic', 'bold', 'minimal'].map((tVal) => (
                                     <button
                                         key={tVal}
-                                        onClick={() => handleChange('theme', tVal as any)}
+                                        onClick={() => handleChange('theme', tVal as CoverConfig['theme'])}
                                         className={`px-3 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${theme === tVal
                                             ? `${appTheme.active} shadow-lg scale-[1.02]`
                                             : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                             }`}
                                     >
-                                        {t(`theme.${tVal}` as any, currentLang)}
+                                        {t(`theme.${tVal}` as TranslationKey, currentLang)}
                                     </button>
                                 ))}
                             </div>
@@ -451,5 +518,3 @@ export const Controls: React.FC<ControlsProps> = ({
         </div>
     );
 };
-
-

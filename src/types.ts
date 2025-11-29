@@ -16,6 +16,8 @@ export interface CoverConfig {
     showIcon: boolean;
     showDecoration: boolean;
     gradientPreset: 'custom' | 'sunset' | 'ocean' | 'forest' | 'candy' | 'aurora' | 'flame';
+    // 添加图标类型选项
+    iconType: 'brush' | 'cpu' | 'code' | 'database' | 'cloud' | 'layers' | 'package' | 'settings';
 }
 
 export const defaultCoverConfig: CoverConfig = {
@@ -36,6 +38,7 @@ export const defaultCoverConfig: CoverConfig = {
     showIcon: true,
     showDecoration: true,
     gradientPreset: 'aurora',
+    iconType: 'code', // 默认图标类型
 };
 
 // 渐变预设定义
