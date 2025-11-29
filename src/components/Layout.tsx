@@ -56,14 +56,14 @@ export const Layout: React.FC<LayoutProps> = ({
             {/* Sidebar / Controls Panel */}
             <aside className={`w-full md:w-[400px] ${theme.sidebar} border-r ${theme.border} flex flex-col h-full z-20 shadow-2xl ${currentTheme === 'cyberpunk' ? 'glass-effect-cyberpunk' : currentTheme === 'forest' ? 'glass-effect-forest' : currentTheme === 'ocean' ? 'glass-effect-ocean' : currentTheme === 'sunset' ? 'glass-effect-sunset' : currentTheme === 'aurora' ? 'glass-effect-aurora' : 'glass-effect-dark'}`}>
                 {/* Header */}
-                <div className={`h-16 flex items-center justify-between px-6 ${theme.sidebar}/70 backdrop-blur-md sticky top-0 z-10 glass-effect`}>
-                    <div className="flex items-center gap-3 text-white group">
+                <div className={`h-16 flex items-center justify-between px-6 ${theme.sidebar}/60 backdrop-blur-lg sticky top-0 z-10 transition-all duration-300 hover:${theme.sidebar}/70`}>
+                    <div className="flex items-center gap-4 text-white group cursor-pointer transform transition-all duration-300 hover:scale-105">
                         <img
                             src="/logo.png"
                             alt={t('app.title', currentLang)}
-                            className="w-12 h-12 rounded-xl object-cover transition-all duration-200"
+                            className="w-11 h-11 rounded-2xl object-cover transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-3"
                         />
-                        <span className="font-bold tracking-tight text-lg bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">{t('app.title', currentLang)}</span>
+                        <span className="font-bold tracking-wide text-lg bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent transition-all duration-300 group-hover:from-white/90 group-hover:to-white/60">{t('app.title', currentLang)}</span>
                     </div>
 
                     {/* Language and Theme Dropdowns */}

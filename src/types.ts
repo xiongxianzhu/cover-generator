@@ -21,7 +21,7 @@ export interface CoverConfig {
 export const defaultCoverConfig: CoverConfig = {
     title: '构建未来',
     subtitle: '深入探索 React 19 与现代 Web 开发',
-    author: 'Antigravity',
+    author: 'xx',
     theme: 'minimal',
     backgroundColor: '#000000',
     textColor: '#ffffff',

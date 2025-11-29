@@ -58,6 +58,26 @@ function App() {
     }
   };
 
+  // 为整个主区域添加滚轮事件监听
+  useEffect(() => {
+    const mainElement = document.querySelector('main');
+    
+    if (mainElement) {
+      const wheelHandler = (event: WheelEvent) => {
+        // 只有当鼠标在主区域内时才响应滚轮事件
+        if (event.target instanceof Element && mainElement.contains(event.target)) {
+          handleWheel(event);
+        }
+      };
+
+      mainElement.addEventListener('wheel', wheelHandler, { passive: false });
+      
+      return () => {
+        mainElement.removeEventListener('wheel', wheelHandler);
+      };
+    }
+  }, []); // 空依赖数组，只在组件挂载时设置一次
+
   // 键盘快捷键支持
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

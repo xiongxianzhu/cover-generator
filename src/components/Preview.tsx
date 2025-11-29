@@ -179,12 +179,6 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
                 {/* Main Content */}
                 <div className={`flex flex-col gap-6 max-w-4xl ${alignClass}`}>
-                    {showDecoration && (
-                        <div className="flex items-center gap-3 opacity-80 mb-2">
-                            <Code2 size={20} />
-                            <span className="font-mono text-sm tracking-widest uppercase">Tech Cover</span>
-                        </div>
-                    )}
 
                     <h1 className={`${titleClass} font-bold leading-tight tracking-tight drop-shadow-lg`}>
                         {title}
