@@ -88,12 +88,92 @@ body {
   }
 }
 
-/* 玻璃效果增强 */
+/* 毛玻璃效果增强 */
 .glass-effect {
   backdrop-filter: blur(16px) saturate(120%);
   -webkit-backdrop-filter: blur(16px) saturate(120%);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.1),
+    0 8px 40px rgba(0, 0, 0, 0.05),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+}
+
+.glass-effect-dark {
+  backdrop-filter: blur(20px) saturate(100%) brightness(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(100%) brightness(1.1);
+  background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(168, 85, 247, 0.15),
+    0 16px 60px rgba(168, 85, 247, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.glass-effect-cyberpunk {
+  backdrop-filter: blur(18px) saturate(150%) hue-rotate(270deg);
+  -webkit-backdrop-filter: blur(18px) saturate(150%) hue-rotate(270deg);
+  background: linear-gradient(135deg,
+    rgba(168, 85, 247, 0.15) 0%,
+    rgba(139, 69, 246, 0.1) 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  box-shadow:
+    0 8px 32px rgba(168, 85, 247, 0.2),
+    0 16px 60px rgba(139, 69, 246, 0.12),
+    inset 0 0 0 1px rgba(236, 72, 153, 0.15);
+}
+
+.glass-effect-forest {
+  backdrop-filter: blur(15px) saturate(140%) hue-rotate(120deg);
+  -webkit-backdrop-filter: blur(15px) saturate(140%) hue-rotate(120deg);
+  background: linear-gradient(135deg,
+    rgba(34, 197, 94, 0.2) 0%,
+    rgba(22, 163, 74, 0.1) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  box-shadow:
+    0 8px 32px rgba(34, 197, 94, 0.25),
+    0 16px 60px rgba(22, 163, 74, 0.15),
+    inset 0 0 0 1px rgba(34, 197, 94, 0.1);
+}
+
+.glass-effect-ocean {
+  backdrop-filter: blur(16px) saturate(130%) hue-rotate(200deg);
+  -webkit-backdrop-filter: blur(16px) saturate(130%) hue-rotate(200deg);
+  background: linear-gradient(135deg,
+    rgba(59, 130, 246, 0.2) 0%,
+    rgba(37, 99, 235, 0.1) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow:
+    0 8px 32px rgba(59, 130, 246, 0.25),
+    0 16px 60px rgba(37, 99, 235, 0.15),
+    inset 0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.glass-effect-sunset {
+  backdrop-filter: blur(14px) saturate(160%) hue-rotate(30deg);
+  -webkit-backdrop-filter: blur(14px) saturate(160%) hue-rotate(30deg);
+  background: linear-gradient(135deg,
+    rgba(249, 115, 22, 0.2) 0%,
+    rgba(217, 119, 6, 0.1) 100%);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  box-shadow:
+    0 8px 32px rgba(249, 115, 22, 0.25),
+    0 16px 60px rgba(217, 119, 6, 0.15),
+    inset 0 0 0 1px rgba(249, 115, 22, 0.1);
+}
+
+.glass-effect-aurora {
+  backdrop-filter: blur(20px) saturate(180%) hue-rotate(170deg);
+  -webkit-backdrop-filter: blur(20px) saturate(180%) hue-rotate(170deg);
+  background: linear-gradient(135deg,
+    rgba(20, 184, 166, 0.2) 0%,
+    rgba(6, 182, 212, 0.1) 100%);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  box-shadow:
+    0 8px 32px rgba(20, 184, 166, 0.25),
+    0 16px 60px rgba(6, 182, 212, 0.15),
+    inset 0 0 0 1px rgba(20, 184, 166, 0.1);
 }
 
 /* 文字渐变效果 */

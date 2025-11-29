@@ -26,6 +26,7 @@ export const translations = {
         'zoom.in': 'Zoom In',
         'zoom.out': 'Zoom Out',
         'zoom.reset': 'Reset Zoom',
+        'zoom.shortcuts': 'Shortcuts: + / - / 0 | Scroll: Ctrl + Scroll',
         'theme.modern': 'Modern',
         'theme.classic': 'Classic',
         'theme.bold': 'Bold',
@@ -55,6 +56,8 @@ export const translations = {
         'theme.cyberpunk': 'Cyberpunk',
         'theme.forest': 'Forest',
         'theme.ocean': 'Ocean',
+        'theme.sunset': 'Sunset',
+        'theme.aurora': 'Aurora',
     },
     'zh-CN': {
         'app.title': '封面生成器',
@@ -81,6 +84,7 @@ export const translations = {
         'zoom.in': '放大',
         'zoom.out': '缩小',
         'zoom.reset': '重置缩放',
+        'zoom.shortcuts': '快捷键: + / - / 0 | 滚轮: Ctrl + 滚轮',
         'theme.modern': '现代',
         'theme.classic': '经典',
         'theme.bold': '大胆',
@@ -110,6 +114,8 @@ export const translations = {
         'theme.cyberpunk': '赛博朋克',
         'theme.forest': '森林',
         'theme.ocean': '海洋',
+        'theme.sunset': '日落',
+        'theme.aurora': '极光',
     }
 };
 

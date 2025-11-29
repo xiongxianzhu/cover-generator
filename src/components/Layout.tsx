@@ -52,9 +52,9 @@ export const Layout: React.FC<LayoutProps> = ({
     return (
         <div className={`h-screen ${theme.bg} ${theme.text} flex flex-col md:flex-row font-sans overflow-hidden`}>
             {/* Sidebar / Controls Panel */}
-            <aside className={`w-full md:w-[400px] ${theme.sidebar} border-r ${theme.border} flex flex-col h-full z-20 shadow-2xl`}>
+            <aside className={`w-full md:w-[400px] ${theme.sidebar} border-r ${theme.border} flex flex-col h-full z-20 shadow-2xl ${currentTheme === 'cyberpunk' ? 'glass-effect-cyberpunk' : currentTheme === 'forest' ? 'glass-effect-forest' : currentTheme === 'ocean' ? 'glass-effect-ocean' : currentTheme === 'sunset' ? 'glass-effect-sunset' : currentTheme === 'aurora' ? 'glass-effect-aurora' : 'glass-effect-dark'}`}>
                 {/* Header */}
-                <div className={`h-16 flex items-center justify-between px-6 border-b ${theme.border} ${theme.sidebar}/70 backdrop-blur-lg sticky top-0 z-10 shadow-sm`}>
+                <div className={`h-16 flex items-center justify-between px-6 border-b ${theme.border} ${theme.sidebar}/70 backdrop-blur-md sticky top-0 z-10 shadow-sm glass-effect`}>
                     <div className="flex items-center gap-3 text-white group">
                         <img
                             src="/logo.png"
@@ -76,7 +76,7 @@ export const Layout: React.FC<LayoutProps> = ({
                                 <span className="font-medium">{t(`theme.${currentTheme}` as any, currentLang)}</span>
                             </button>
                             {showThemeDropdown && (
-                                <div className={`absolute right-0 top-full mt-2 w-36 ${theme.sidebar} border ${theme.border} rounded-xl shadow-2xl z-50 backdrop-blur-sm transform transition-all duration-200`}>
+                                <div className={`absolute right-0 top-full mt-2 w-36 ${theme.sidebar} border ${theme.border} rounded-xl shadow-2xl z-50 backdrop-blur-sm transform transition-all duration-200 glass-effect`}>
                                     {Object.entries(appThemes).map(([key]) => (
                                         <button
                                             key={key}
@@ -106,19 +106,7 @@ export const Layout: React.FC<LayoutProps> = ({
                                 <span className="font-medium">{currentLang === 'en' ? 'EN' : '中'}</span>
                             </button>
                             {showLangDropdown && (
-                                <div className={`absolute right-0 top-full mt-2 w-32 ${theme.sidebar} border ${theme.border} rounded-xl shadow-2xl z-50 backdrop-blur-sm transform transition-all duration-200`}>
-                                    <button
-                                        onClick={() => {
-                                            onToggleLanguage('en');
-                                            setShowLangDropdown(false);
-                                        }}
-                                        className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentLang === 'en' ? 'bg-white/20 text-blue-300 font-medium' : ''} ${theme.text} transform hover:scale-[1.02]`}
-                                    >
-                                        <span className="flex items-center gap-2">
-                                            <span className="text-blue-400">🇺🇸</span>
-                                            English
-                                        </span>
-                                    </button>
+                                <div className={`absolute right-0 top-full mt-2 w-32 ${theme.sidebar} border ${theme.border} rounded-xl shadow-2xl z-50 backdrop-blur-sm transform transition-all duration-200 glass-effect`}>
                                     <button
                                         onClick={() => {
                                             onToggleLanguage('zh-CN');
@@ -129,6 +117,18 @@ export const Layout: React.FC<LayoutProps> = ({
                                         <span className="flex items-center gap-2">
                                             <span className="text-red-400">🇨🇳</span>
                                             中文
+                                        </span>
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            onToggleLanguage('en');
+                                            setShowLangDropdown(false);
+                                        }}
+                                        className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentLang === 'en' ? 'bg-white/20 text-blue-300 font-medium' : ''} ${theme.text} transform hover:scale-[1.02]`}
+                                    >
+                                        <span className="flex items-center gap-2">
+                                            <span className="text-blue-400">🇺🇸</span>
+                                            English
                                         </span>
                                     </button>
                                 </div>

@@ -83,7 +83,7 @@ export const Controls: React.FC<ControlsProps> = ({
     } = config;
 
     return (
-        <div className={`flex flex-col h-full ${appTheme.sidebar} ${appTheme.text}`}>
+        <div className={`flex flex-col h-full ${appTheme.sidebar} ${appTheme.text} glass-effect`}>
             {/* Magic Button */}
             <div className={`p-4 border-b ${appTheme.border}`}>
                 <button
@@ -216,7 +216,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                     />
                                     <label
                                         htmlFor="bg-upload"
-                                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed ${appTheme.border} rounded-xl cursor-pointer hover:${appTheme.accent}/20 hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} hover:${appTheme.sidebar}/50 transition-all duration-200 group transform hover:scale-[1.01] active:scale-[0.99] backdrop-blur-sm`}
+                                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed ${appTheme.border} rounded-xl cursor-pointer hover:${appTheme.accent}/20 hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} hover:${appTheme.sidebar}/50 transition-all duration-200 group transform hover:scale-[1.01] active:scale-[0.99] backdrop-blur-sm glass-effect`}
                                     >
                                         <Upload size={24} className={`text-neutral-500 mb-2 group-hover:${appTheme.accent} transition-colors duration-200`} />
                                         <span className="text-xs text-neutral-400 group-hover:text-neutral-300 transition-colors duration-200">{t('upload.text', currentLang)}</span>
@@ -422,7 +422,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         </button>
                     </div>
                     <div className={`text-xs ${appTheme.text} opacity-60 text-center`}>
-                        快捷键: + / - / 0 | 滚轮: Ctrl + 滚轮
+                        {t('zoom.shortcuts', currentLang)}
                     </div>
                 </div>
             </div>

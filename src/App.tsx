@@ -13,7 +13,7 @@ function App() {
   const [config, setConfig] = useState<CoverConfig>(defaultCoverConfig);
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
-  const [currentTheme, setCurrentTheme] = useState<AppTheme>('dark');
+  const [currentTheme, setCurrentTheme] = useState<AppTheme>('cyberpunk');
   const [zoomLevel, setZoomLevel] = useState(60); // 默认60%缩放 (对应xl:scale-[0.6])
   const previewRef = useRef<HTMLDivElement>(null);
 
