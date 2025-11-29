@@ -171,15 +171,21 @@ export const Controls: React.FC<ControlsProps> = ({
                                         </button>
                                     ))}
                                 </div>
-                                <select
-                                    value={titleSize}
-                                    onChange={(e) => handleChange('titleSize', e.target.value as any)}
-                                    className={`w-full px-3 py-2 rounded border ${appTheme.buttonBorder} ${appTheme.input} bg-opacity-80 backdrop-blur-sm cursor-pointer transition-all duration-200 hover:bg-opacity-100 focus:outline-none focus:ring-2 focus:ring-purple-500`}
-                                >
-                                    <option value="small">{t('size.small', currentLang)}</option>
-                                    <option value="medium">{t('size.medium', currentLang)}</option>
-                                    <option value="large">{t('size.large', currentLang)}</option>
-                                </select>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {['small', 'medium', 'large'].map((size) => (
+                                        <button
+                                            key={size}
+                                            onClick={() => handleChange('titleSize', size as any)}
+                                            className={`px-3 py-2 rounded border transition-colors duration-150 text-sm ${
+                                                titleSize === size
+                                                    ? 'bg-white/15 text-white font-medium border-white/20'
+                                                    : 'text-white/70 border-white/10 bg-white/5 hover:bg-white/10 hover:text-white'
+                                            }`}
+                                        >
+                                            {t(`size.${size}` as any, currentLang)}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -390,7 +396,7 @@ export const Controls: React.FC<ControlsProps> = ({
             </div>
 
             {/* Zoom Controls */}
-            <div className={`p-4 border-t ${appTheme.border} ${appTheme.button}`}>
+            <div className={`p-4 border-t ${appTheme.border}`}>
                 <div className="space-y-3">
                     <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('zoom.preview', currentLang)}</label>
                     <div className="flex items-center gap-2">
@@ -428,7 +434,7 @@ export const Controls: React.FC<ControlsProps> = ({
             </div>
 
             {/* Footer Actions */}
-            <div className={`p-4 border-t ${appTheme.border} ${appTheme.button}`}>
+            <div className={`p-4 border-t ${appTheme.border}`}>
                 <button
                     onClick={onDownload}
                     disabled={isDownloading}

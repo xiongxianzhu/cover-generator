@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Globe, Palette, Github, ExternalLink } from 'lucide-react';
+import { Globe, Palette, Github, ExternalLink, Heart } from 'lucide-react';
 import { t, type TranslationKey } from '../utils/i18n';
 import type { Language } from '../utils/i18n';
 import { appThemes, type AppTheme } from '../types/theme';
@@ -208,8 +208,8 @@ export const Layout: React.FC<LayoutProps> = ({
                     <span className="text-white/30">•</span>
 
                     {/* Designed By */}
-                    <span className="text-white/50">
-                        Designed by Xiongxian Zhu
+                    <span className="flex items-center gap-1 text-white/50">
+                        Designed by xx with <Heart size={12} className="inline text-red-500" fill="currentColor" />
                     </span>
                 </div>
             </footer>
