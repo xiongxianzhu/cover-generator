@@ -1,13 +1,15 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import type { CoverConfig } from '../types';
 import { gradientPresets, geometricPatterns } from '../types';
 import { Terminal, Code2, Cpu } from 'lucide-react';
 
 interface PreviewProps {
     config: CoverConfig;
+    zoomLevel?: number;
+    onWheel?: (event: WheelEvent) => void;
 }
 
-export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config }, ref) => {
+export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomLevel = 60, onWheel }, ref) => {
     const {
         title,
         subtitle,
@@ -27,6 +29,20 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config }, ref
         showDecoration,
         gradientPreset,
     } = config;
+
+    // 滚轮事件监听
+    useEffect(() => {
+        const previewElement = ref as React.RefObject<HTMLDivElement>;
+        const containerElement = previewElement.current;
+
+        if (containerElement && onWheel) {
+            containerElement.addEventListener('wheel', onWheel as EventListener, { passive: false });
+
+            return () => {
+                containerElement.removeEventListener('wheel', onWheel as EventListener);
+            };
+        }
+    }, [onWheel, ref]);
 
     // Aspect Ratio Dimensions
     const getDimensions = () => {
@@ -204,7 +220,14 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config }, ref
     };
 
     return (
-        <div className="overflow-hidden shadow-2xl rounded-sm transition-all duration-500 ease-in-out origin-center transform scale-[0.4] md:scale-[0.5] lg:scale-[0.6] xl:scale-[0.7]" style={{ width: dimensions.width, height: dimensions.height }}>
+        <div
+            className="overflow-hidden shadow-2xl rounded-sm transition-all duration-300 ease-in-out origin-center transform"
+            style={{
+                width: dimensions.width,
+                height: dimensions.height,
+                transform: `scale(${zoomLevel / 100})`
+            }}
+        >
             <div
                 ref={ref}
                 className="w-full h-full relative overflow-hidden"

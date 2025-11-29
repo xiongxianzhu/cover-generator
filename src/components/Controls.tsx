@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
     Wand2,
     Type,
@@ -12,6 +12,9 @@ import {
     Instagram,
     Smartphone,
     Download,
+    ZoomIn,
+    ZoomOut,
+    RotateCcw,
 } from 'lucide-react';
 import type { CoverConfig } from '../types';
 import { t } from '../utils/i18n';
@@ -26,6 +29,10 @@ interface ControlsProps {
     onRandomize: () => void;
     currentLang: Language;
     currentTheme: AppTheme;
+    zoomLevel: number;
+    onZoomIn: () => void;
+    onZoomOut: () => void;
+    onZoomReset: () => void;
 }
 
 type Tab = 'general' | 'style' | 'layout';
@@ -38,6 +45,10 @@ export const Controls: React.FC<ControlsProps> = ({
     onRandomize,
     currentLang,
     currentTheme,
+    zoomLevel,
+    onZoomIn,
+    onZoomOut,
+    onZoomReset,
 }) => {
     const appTheme = appThemes[currentTheme];
     const [activeTab, setActiveTab] = useState<Tab>('general');
@@ -368,6 +379,44 @@ export const Controls: React.FC<ControlsProps> = ({
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* Zoom Controls */}
+            <div className="p-4 border-t border-neutral-800 bg-neutral-900">
+                <div className="space-y-3">
+                    <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('zoom.preview', currentLang)}</label>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={onZoomOut}
+                            disabled={zoomLevel <= 20}
+                            className="p-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title={`${t('zoom.out', currentLang)} (-)`}
+                        >
+                            <ZoomOut size={16} />
+                        </button>
+                        <div className="flex-1 text-center">
+                            <span className="text-sm font-medium text-neutral-300">{zoomLevel}%</span>
+                        </div>
+                        <button
+                            onClick={onZoomIn}
+                            disabled={zoomLevel >= 150}
+                            className="p-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title={`${t('zoom.in', currentLang)} (+)`}
+                        >
+                            <ZoomIn size={16} />
+                        </button>
+                        <button
+                            onClick={onZoomReset}
+                            className="p-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 transition-colors"
+                            title={`${t('zoom.reset', currentLang)} (0)`}
+                        >
+                            <RotateCcw size={16} />
+                        </button>
+                    </div>
+                    <div className="text-xs text-neutral-500 text-center">
+                        快捷键: + / - / 0 | 滚轮: Ctrl + 滚轮
+                    </div>
+                </div>
             </div>
 
             {/* Footer Actions */}

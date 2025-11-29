@@ -7,13 +7,14 @@ import type { CoverConfig } from './types';
 import { defaultCoverConfig } from './types';
 import type { Language } from './utils/i18n';
 import { t } from './utils/i18n';
-import { appThemes, type AppTheme } from './types/theme';
+import type { AppTheme } from './types/theme';
 
 function App() {
   const [config, setConfig] = useState<CoverConfig>(defaultCoverConfig);
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
   const [currentTheme, setCurrentTheme] = useState<AppTheme>('dark');
+  const [zoomLevel, setZoomLevel] = useState(60); // 默认60%缩放 (对应xl:scale-[0.6])
   const previewRef = useRef<HTMLDivElement>(null);
 
   // 动态设置页面标题
@@ -30,6 +31,61 @@ function App() {
     setCurrentLang(lang);
   };
 
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + 10, 150)); // 最大150%
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(prev - 10, 20)); // 最小20%
+  };
+
+  const handleZoomReset = () => {
+    setZoomLevel(60); // 重置到默认60%
+  };
+
+  // 鼠标滚轮缩放处理
+  const handleWheel = (event: WheelEvent) => {
+    // 检查Ctrl或Meta键是否被按下
+    if (event.ctrlKey || event.metaKey) {
+      event.preventDefault();
+
+      // 根据滚轮方向调整缩放
+      if (event.deltaY < 0) {
+        // 向上滚动，放大
+        handleZoomIn();
+      } else {
+        // 向下滚动，缩小
+        handleZoomOut();
+      }
+    }
+  };
+
+  // 键盘快捷键支持
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // 只在非输入框中响应快捷键
+      if (event.target instanceof HTMLInputElement ||
+          event.target instanceof HTMLTextAreaElement ||
+          event.target instanceof HTMLSelectElement) {
+        return;
+      }
+
+      if (event.key === '+' || event.key === '=') {
+        event.preventDefault();
+        handleZoomIn();
+      } else if (event.key === '-' || event.key === '_') {
+        event.preventDefault();
+        handleZoomOut();
+      } else if (event.key === '0') {
+        event.preventDefault();
+        handleZoomReset();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const handleDownload = useCallback(async () => {
     if (previewRef.current === null) {
       return;
@@ -40,17 +96,44 @@ function App() {
     await new Promise(resolve => setTimeout(resolve, 800));
 
     try {
-      const dataUrl = await toPng(previewRef.current, { cacheBust: true, pixelRatio: 2 });
-      const link = document.createElement('a');
-      link.download = `${config.title.replace(/\s+/g, '-').toLowerCase()}-cover.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (err) {
-      console.error('Failed to download image', err);
+      // 简化的导出逻辑 - 高质量PNG导出
+      const element = previewRef.current;
+
+      // 临时移除缩放transform，确保导出原始尺寸
+      const originalTransform = element.style.transform;
+      element.style.transform = 'scale(1)';
+
+      try {
+        const dataUrl = await toPng(element, {
+          cacheBust: true,
+          pixelRatio: 2, // 高分辨率
+          quality: 0.95, // 高质量
+          backgroundColor: undefined,
+          style: {
+            transform: 'scale(1)',
+            transformOrigin: 'top left'
+          }
+        });
+
+        // 创建下载链接
+        const link = document.createElement('a');
+        link.download = `${config.title.replace(/\s+/g, '-').toLowerCase()}-cover.png`;
+        link.href = dataUrl;
+        link.click();
+
+        return dataUrl;
+
+      } finally {
+        // 恢复原始transform
+        element.style.transform = originalTransform;
+      }
+    } catch (error) {
+      console.error('Failed to download image', error);
+      throw error;
     } finally {
       setIsDownloading(false);
     }
-  }, [config.title]);
+  }, []);
 
   const handleRandomize = () => {
     const themes: CoverConfig['theme'][] = ['modern', 'classic', 'bold', 'minimal'];
@@ -99,6 +182,10 @@ function App() {
           isDownloading={isDownloading}
           currentLang={currentLang}
           currentTheme={currentTheme}
+          zoomLevel={zoomLevel}
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
+          onZoomReset={handleZoomReset}
         />
       }
       currentLang={currentLang}
@@ -106,7 +193,7 @@ function App() {
       currentTheme={currentTheme}
       onThemeChange={setCurrentTheme}
     >
-      <Preview ref={previewRef} config={config} />
+      <Preview ref={previewRef} config={config} zoomLevel={zoomLevel} onWheel={handleWheel} />
     </Layout>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Command, Globe, Sun, Moon, Palette } from 'lucide-react';
+import { Globe, Palette } from 'lucide-react';
 import { t } from '../utils/i18n';
 import type { Language } from '../utils/i18n';
 import { appThemes, type AppTheme } from '../types/theme';
