@@ -258,11 +258,13 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
                 {/* Header / Icon */}
                 <div className="w-full flex justify-between items-start">
-                    {showIcon && (
-                        <div className={themeStyles.header}>
-                            <Terminal size={32} />
-                        </div>
-                    )}
+                    <div>
+                        {showIcon && (
+                            <div className={themeStyles.header}>
+                                <Terminal size={32} />
+                            </div>
+                        )}
+                    </div>
                     {showDecoration && (
                         <div className={themeStyles.decoration}>
                             <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
