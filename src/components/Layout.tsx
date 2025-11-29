@@ -11,6 +11,7 @@ interface LayoutProps {
     onToggleLanguage: (lang: Language) => void;
     currentTheme?: AppTheme;
     onThemeChange?: (theme: AppTheme) => void;
+    onWheel?: (event: WheelEvent) => void;
 }
 
 export const Layout: React.FC<LayoutProps> = ({
@@ -19,7 +20,8 @@ export const Layout: React.FC<LayoutProps> = ({
     currentLang,
     onToggleLanguage,
     currentTheme: externalCurrentTheme,
-    onThemeChange
+    onThemeChange,
+    onWheel
 }) => {
     const [internalTheme, setInternalTheme] = useState<AppTheme>('dark');
     const [showLangDropdown, setShowLangDropdown] = useState(false);
@@ -32,7 +34,7 @@ export const Layout: React.FC<LayoutProps> = ({
     const setCurrentTheme = onThemeChange || setInternalTheme;
     const theme = appThemes[currentTheme];
 
-    // 点击外部关闭下拉菜单
+    // 点击外部关闭下拉菜单和滚轮事件监听
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
@@ -47,19 +49,19 @@ export const Layout: React.FC<LayoutProps> = ({
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [onWheel]);
 
     return (
         <div className={`h-screen ${theme.bg} ${theme.text} flex flex-col md:flex-row font-sans overflow-hidden`}>
             {/* Sidebar / Controls Panel */}
             <aside className={`w-full md:w-[400px] ${theme.sidebar} border-r ${theme.border} flex flex-col h-full z-20 shadow-2xl ${currentTheme === 'cyberpunk' ? 'glass-effect-cyberpunk' : currentTheme === 'forest' ? 'glass-effect-forest' : currentTheme === 'ocean' ? 'glass-effect-ocean' : currentTheme === 'sunset' ? 'glass-effect-sunset' : currentTheme === 'aurora' ? 'glass-effect-aurora' : 'glass-effect-dark'}`}>
                 {/* Header */}
-                <div className={`h-16 flex items-center justify-between px-6 border-b ${theme.border} ${theme.sidebar}/70 backdrop-blur-md sticky top-0 z-10 shadow-sm glass-effect`}>
+                <div className={`h-16 flex items-center justify-between px-6 ${theme.sidebar}/70 backdrop-blur-md sticky top-0 z-10 glass-effect`}>
                     <div className="flex items-center gap-3 text-white group">
                         <img
                             src="/logo.png"
                             alt={t('app.title', currentLang)}
-                            className="w-12 h-12 rounded-xl object-cover shadow-md ring-2 ring-white/10 group-hover:ring-white/20 transition-all duration-200"
+                            className="w-12 h-12 rounded-xl object-cover transition-all duration-200"
                         />
                         <span className="font-bold tracking-tight text-lg bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">{t('app.title', currentLang)}</span>
                     </div>
@@ -144,7 +146,10 @@ export const Layout: React.FC<LayoutProps> = ({
             </aside>
 
             {/* Main Preview Area */}
-            <main className={`flex-1 ${theme.bg} relative flex items-center justify-center overflow-hidden p-8`}>
+            <main
+                className={`flex-1 ${theme.bg} relative flex items-center justify-center overflow-hidden p-8`}
+                onWheel={onWheel}
+            >
                 {/* Animated Grid Background */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none"
                     style={{

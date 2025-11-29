@@ -14,7 +14,7 @@ function App() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
   const [currentTheme, setCurrentTheme] = useState<AppTheme>('cyberpunk');
-  const [zoomLevel, setZoomLevel] = useState(60); // 默认60%缩放 (对应xl:scale-[0.6])
+  const [zoomLevel, setZoomLevel] = useState(80); // 默认80%缩放，更大的初始预览尺寸
   const previewRef = useRef<HTMLDivElement>(null);
 
   // 动态设置页面标题
@@ -45,18 +45,16 @@ function App() {
 
   // 鼠标滚轮缩放处理
   const handleWheel = (event: WheelEvent) => {
-    // 检查Ctrl或Meta键是否被按下
-    if (event.ctrlKey || event.metaKey) {
-      event.preventDefault();
+    // 直接响应滚轮，无需按Ctrl键
+    event.preventDefault();
 
-      // 根据滚轮方向调整缩放
-      if (event.deltaY < 0) {
-        // 向上滚动，放大
-        handleZoomIn();
-      } else {
-        // 向下滚动，缩小
-        handleZoomOut();
-      }
+    // 根据滚轮方向调整缩放
+    if (event.deltaY < 0) {
+      // 向上滚动，放大
+      handleZoomIn();
+    } else {
+      // 向下滚动，缩小
+      handleZoomOut();
     }
   };
 

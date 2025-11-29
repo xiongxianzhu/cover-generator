@@ -99,21 +99,21 @@ export const Controls: React.FC<ControlsProps> = ({
             <div className={`flex border-b ${appTheme.border}`}>
                 <button
                     onClick={() => setActiveTab('general')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'general' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/30'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'general' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'}`}
                 >
                     <Type size={16} className={activeTab === 'general' ? 'text-purple-400' : ''} />
                     {t('tab.content', currentLang)}
                 </button>
                 <button
                     onClick={() => setActiveTab('style')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'style' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/30'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'style' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : `${appTheme.text} opacity-70 hover:${appTheme.text}/80 hover:bg-neutral-800/30`}`}
                 >
                     <Palette size={16} className={activeTab === 'style' ? 'text-purple-400' : ''} />
                     {t('tab.style', currentLang)}
                 </button>
                 <button
                     onClick={() => setActiveTab('layout')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'layout' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/30'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'layout' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : `${appTheme.text} opacity-70 hover:${appTheme.text}/80 hover:bg-neutral-800/30`}`}
                 >
                     <Layout size={16} className={activeTab === 'layout' ? 'text-purple-400' : ''} />
                     {t('tab.layout', currentLang)}
@@ -189,7 +189,7 @@ export const Controls: React.FC<ControlsProps> = ({
                 {activeTab === 'style' && (
                     <div className="space-y-5">
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('label.background', currentLang)}</label>
+                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.background', currentLang)}</label>
                             <div className="grid grid-cols-2 gap-2">
                                 {['solid', 'gradient', 'pattern', 'image'].map((type) => (
                                     <button
@@ -197,7 +197,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                         onClick={() => handleChange('backgroundType', type as any)}
                                         className={`px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${backgroundType === type
                                             ? `${appTheme.active} shadow-lg scale-[1.02] border-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`
-                                            : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
+                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                             }`}
                                     >
                                         {t(`bg.${type}` as any, currentLang)}
@@ -226,7 +226,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                 <>
                                     {backgroundType === 'gradient' && (
                                         <div className="space-y-3">
-                                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">渐变预设</label>
+                                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">渐变预设</label>
                                             <div className="grid grid-cols-2 gap-2">
                                                 {['custom', 'sunset', 'ocean', 'forest', 'candy', 'aurora', 'flame'].map((preset) => (
                                                     <button
@@ -234,7 +234,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                                         onClick={() => handleChange('gradientPreset', preset as any)}
                                                         className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${gradientPreset === preset
                                                             ? `${appTheme.active} shadow-lg scale-[1.02]`
-                                                            : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
+                                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                                             }`}
                                                     >
                                                         {t(`gradient.${preset}` as any, currentLang)}
@@ -263,7 +263,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         {/* Pattern Selection */}
                         {backgroundType !== 'image' && (
                             <div className="space-y-3">
-                                <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">几何纹理</label>
+                                <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">几何纹理</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {['none', 'dots', 'lines', 'waves', 'grid', 'triangles'].map((p) => (
                                         <button
@@ -271,7 +271,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                             onClick={() => handleChange('pattern', p as any)}
                                             className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${pattern === p
                                                 ? `${appTheme.active} shadow-lg scale-[1.02]`
-                                                : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
+                                                : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                                 }`}
                                         >
                                             {t(`pattern.${p}` as any, currentLang)}
@@ -283,7 +283,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('label.theme', currentLang)}</label>
+                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.theme', currentLang)}</label>
                             <div className="grid grid-cols-2 gap-2">
                                 {['modern', 'classic', 'bold', 'minimal'].map((tVal) => (
                                     <button
@@ -291,7 +291,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                         onClick={() => handleChange('theme', tVal as any)}
                                         className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${theme === tVal
                                             ? `${appTheme.active} shadow-lg scale-[1.02]`
-                                            : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
+                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
                                             }`}
                                     >
                                         {t(`theme.${tVal}` as any, currentLang)}
@@ -306,25 +306,25 @@ export const Controls: React.FC<ControlsProps> = ({
                 {activeTab === 'layout' && (
                     <div className="space-y-5">
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('label.aspectRatio', currentLang)}</label>
+                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.aspectRatio', currentLang)}</label>
                             <div className="grid grid-cols-3 gap-2">
                                 <button
                                     onClick={() => handleChange('aspectRatio', '16:9')}
-                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '16:9' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`}`}
+                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '16:9' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
                                 >
                                     <Monitor size={20} className={aspectRatio === '16:9' ? 'text-purple-400' : ''} />
                                     <span className={`text-xs font-medium ${aspectRatio === '16:9' ? 'text-purple-200' : 'text-neutral-400'}`}>16:9</span>
                                 </button>
                                 <button
                                     onClick={() => handleChange('aspectRatio', '1:1')}
-                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '1:1' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`}`}
+                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '1:1' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
                                 >
                                     <Instagram size={20} className={aspectRatio === '1:1' ? 'text-purple-400' : ''} />
                                     <span className={`text-xs font-medium ${aspectRatio === '1:1' ? 'text-purple-200' : 'text-neutral-400'}`}>1:1</span>
                                 </button>
                                 <button
                                     onClick={() => handleChange('aspectRatio', '9:16')}
-                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '9:16' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`}`}
+                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '9:16' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
                                 >
                                     <Smartphone size={20} className={aspectRatio === '9:16' ? 'text-purple-400' : ''} />
                                     <span className={`text-xs font-medium ${aspectRatio === '9:16' ? 'text-purple-200' : 'text-neutral-400'}`}>9:16</span>
@@ -333,7 +333,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('label.visibility', currentLang)}</label>
+                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.visibility', currentLang)}</label>
                             <div className="space-y-2">
                                 <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded-xl ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
                                     <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showAuthor', currentLang)}</span>

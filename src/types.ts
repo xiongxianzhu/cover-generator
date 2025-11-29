@@ -22,7 +22,7 @@ export const defaultCoverConfig: CoverConfig = {
     title: '构建未来',
     subtitle: '深入探索 React 19 与现代 Web 开发',
     author: 'Antigravity',
-    theme: 'modern',
+    theme: 'minimal',
     backgroundColor: '#000000',
     textColor: '#ffffff',
     fontFamily: 'Inter',
@@ -35,7 +35,7 @@ export const defaultCoverConfig: CoverConfig = {
     showAuthor: true,
     showIcon: true,
     showDecoration: true,
-    gradientPreset: 'custom',
+    gradientPreset: 'aurora',
 };
 
 // 渐变预设定义
