@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import type { CoverConfig } from '../types';
+import { gradientPresets, geometricPatterns } from '../types';
 import { Terminal, Code2, Cpu } from 'lucide-react';
 
 interface PreviewProps {
@@ -24,6 +25,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config }, ref
         showAuthor,
         showIcon,
         showDecoration,
+        gradientPreset,
     } = config;
 
     // Aspect Ratio Dimensions
@@ -55,10 +57,14 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config }, ref
         }
 
         if (backgroundType === 'gradient') {
-            // Generate a nice gradient based on the base color
+            // Use gradient preset if available, otherwise generate a basic gradient
+            const gradientStyle = gradientPreset !== 'custom' && gradientPresets[gradientPreset]
+                ? gradientPresets[gradientPreset]
+                : `linear-gradient(135deg, ${backgroundColor} 0%, #000000 100%)`;
+
             return {
                 ...baseStyle,
-                background: `linear-gradient(135deg, ${backgroundColor} 0%, #000000 100%)`
+                background: gradientStyle
             }
         }
 
@@ -92,6 +98,18 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config }, ref
                     <div className="absolute inset-0 opacity-10" style={{
                         background: 'radial-gradient(circle at 100% 50%, transparent 20%, currentColor 21%, currentColor 34%, transparent 35%, transparent), radial-gradient(circle at 0% 50%, transparent 20%, currentColor 21%, currentColor 34%, transparent 35%, transparent) 0 -50px',
                         backgroundSize: '75px 100px'
+                    }} />
+                );
+            case 'grid':
+                return (
+                    <div className="absolute inset-0" style={{
+                        ...geometricPatterns.grid
+                    }} />
+                );
+            case 'triangles':
+                return (
+                    <div className="absolute inset-0" style={{
+                        ...geometricPatterns.triangles
                     }} />
                 );
             default:

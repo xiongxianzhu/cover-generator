@@ -63,6 +63,8 @@ export const Controls: React.FC<ControlsProps> = ({
         showAuthor,
         showIcon,
         showDecoration,
+        pattern,
+        gradientPreset,
     } = config;
 
     return (
@@ -201,16 +203,60 @@ export const Controls: React.FC<ControlsProps> = ({
                                     </label>
                                 </div>
                             ) : (
-                                <div className="flex items-center gap-3 bg-neutral-800 p-3 rounded-lg border border-neutral-700">
-                                    <input
-                                        type="color"
-                                        value={backgroundColor}
-                                        onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                                        className="w-8 h-8 rounded cursor-pointer bg-transparent border-0 p-0"
-                                    />
-                                    <span className="text-sm text-neutral-300 font-mono">{backgroundColor}</span>
-                                </div>
+                                <>
+                                    {backgroundType === 'gradient' && (
+                                        <div className="space-y-3">
+                                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">渐变预设</label>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {['custom', 'sunset', 'ocean', 'forest', 'candy', 'aurora', 'flame'].map((preset) => (
+                                                    <button
+                                                        key={preset}
+                                                        onClick={() => handleChange('gradientPreset', preset as any)}
+                                                        className={`px-3 py-2 rounded-lg text-sm border transition-all ${gradientPreset === preset
+                                                            ? 'bg-purple-600/20 border-purple-500 text-purple-200'
+                                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                                                            }`}
+                                                    >
+                                                        {t(`gradient.${preset}` as any, currentLang)}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {(backgroundType === 'solid' || (backgroundType === 'gradient' && gradientPreset === 'custom')) && (
+                                        <div className="flex items-center gap-3 bg-neutral-800 p-3 rounded-lg border border-neutral-700">
+                                            <input
+                                                type="color"
+                                                value={backgroundColor}
+                                                onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                                                className="w-8 h-8 rounded cursor-pointer bg-transparent border-0 p-0"
+                                            />
+                                            <span className="text-sm text-neutral-300 font-mono">{backgroundColor}</span>
+                                        </div>
+                                    )}
+                                </>
                             )}
+
+                        {/* Pattern Selection */}
+                        {backgroundType !== 'image' && (
+                            <div className="space-y-3">
+                                <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">几何纹理</label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {['none', 'dots', 'lines', 'waves', 'grid', 'triangles'].map((p) => (
+                                        <button
+                                            key={p}
+                                            onClick={() => handleChange('pattern', p as any)}
+                                            className={`px-3 py-2 rounded-lg text-sm border transition-all ${pattern === p
+                                                ? 'bg-purple-600/20 border-purple-500 text-purple-200'
+                                                : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                                                }`}
+                                        >
+                                            {t(`pattern.${p}` as any, currentLang)}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         </div>
 
                         <div className="space-y-3">

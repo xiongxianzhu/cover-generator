@@ -41,7 +41,8 @@ function App() {
 
   const handleRandomize = () => {
     const themes: CoverConfig['theme'][] = ['modern', 'classic', 'bold', 'minimal'];
-    const patterns: CoverConfig['pattern'][] = ['none', 'dots', 'lines', 'waves'];
+    const patterns: CoverConfig['pattern'][] = ['none', 'dots', 'lines', 'waves', 'grid', 'triangles'];
+    const gradientPresets: CoverConfig['gradientPreset'][] = ['custom', 'sunset', 'ocean', 'forest', 'candy', 'aurora', 'flame'];
     const colors = [
       { bg: '#000000', text: '#ffffff' },
       { bg: '#ffffff', text: '#000000' },
@@ -56,6 +57,8 @@ function App() {
     const randomTheme = themes[Math.floor(Math.random() * themes.length)];
     const randomPattern = patterns[Math.floor(Math.random() * patterns.length)];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const randomGradientPreset = gradientPresets[Math.floor(Math.random() * gradientPresets.length)];
+    const isGradient = Math.random() > 0.7; // 30% chance of gradient
 
     setConfig(prev => ({
       ...prev,
@@ -63,7 +66,8 @@ function App() {
       pattern: randomPattern,
       backgroundColor: randomColor.bg,
       textColor: randomColor.text,
-      backgroundType: Math.random() > 0.7 ? 'gradient' : 'solid', // 30% chance of gradient
+      backgroundType: isGradient ? 'gradient' : 'solid',
+      gradientPreset: isGradient ? randomGradientPreset : 'custom',
     }));
   };
 
