@@ -54,7 +54,7 @@ export const Layout: React.FC<LayoutProps> = ({
     return (
         <div className="h-screen flex flex-col overflow-hidden">
             {/* Top Navigation Bar */}
-            <header className={`h-14 ${theme.bg} border-b ${theme.border} flex items-center justify-between px-6 z-30 backdrop-blur-sm bg-black/30`}>
+            <header className={`h-14 ${theme.bg} border-b ${theme.border} flex items-center justify-between px-6 z-30 backdrop-blur-md bg-black/40 shadow-sm`}>
                 {/* Logo and Title */}
                 <div className="flex items-center gap-3 group cursor-pointer">
                     <img
