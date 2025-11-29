@@ -46,6 +46,11 @@ export const translations = {
         'pattern.waves': 'Waves',
         'pattern.grid': 'Grid',
         'pattern.triangles': 'Triangles',
+        'theme.dark': 'Dark',
+        'theme.midnight': 'Midnight',
+        'theme.cyberpunk': 'Cyberpunk',
+        'theme.forest': 'Forest',
+        'theme.ocean': 'Ocean',
     },
     'zh-CN': {
         'app.title': '技术封面生成器',
@@ -92,6 +97,11 @@ export const translations = {
         'pattern.waves': '波浪',
         'pattern.grid': '网格',
         'pattern.triangles': '三角形',
+        'theme.dark': '暗黑',
+        'theme.midnight': '午夜',
+        'theme.cyberpunk': '赛博朋克',
+        'theme.forest': '森林',
+        'theme.ocean': '海洋',
     }
 };
 

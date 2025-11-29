@@ -6,15 +6,17 @@ import { Controls } from './components/Controls';
 import type { CoverConfig } from './types';
 import { defaultCoverConfig } from './types';
 import type { Language } from './utils/i18n';
+import { appThemes, type AppTheme } from './types/theme';
 
 function App() {
   const [config, setConfig] = useState<CoverConfig>(defaultCoverConfig);
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
+  const [currentTheme, setCurrentTheme] = useState<AppTheme>('dark');
   const previewRef = useRef<HTMLDivElement>(null);
 
-  const toggleLanguage = () => {
-    setCurrentLang(prev => prev === 'en' ? 'zh-CN' : 'en');
+  const toggleLanguage = (lang: Language) => {
+    setCurrentLang(lang);
   };
 
   const handleDownload = useCallback(async () => {
@@ -85,10 +87,13 @@ function App() {
           onRandomize={handleRandomize}
           isDownloading={isDownloading}
           currentLang={currentLang}
+          currentTheme={currentTheme}
         />
       }
       currentLang={currentLang}
       onToggleLanguage={toggleLanguage}
+      currentTheme={currentTheme}
+      onThemeChange={setCurrentTheme}
     >
       <Preview ref={previewRef} config={config} />
     </Layout>

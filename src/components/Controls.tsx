@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Wand2,
     Type,
@@ -16,6 +16,7 @@ import {
 import type { CoverConfig } from '../types';
 import { t } from '../utils/i18n';
 import type { Language } from '../utils/i18n';
+import { appThemes, type AppTheme } from '../types/theme';
 
 interface ControlsProps {
     config: CoverConfig;
@@ -24,6 +25,7 @@ interface ControlsProps {
     isDownloading: boolean;
     onRandomize: () => void;
     currentLang: Language;
+    currentTheme: AppTheme;
 }
 
 type Tab = 'general' | 'style' | 'layout';
@@ -35,7 +37,9 @@ export const Controls: React.FC<ControlsProps> = ({
     isDownloading,
     onRandomize,
     currentLang,
+    currentTheme,
 }) => {
+    const appTheme = appThemes[currentTheme];
     const [activeTab, setActiveTab] = useState<Tab>('general');
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,9 +72,9 @@ export const Controls: React.FC<ControlsProps> = ({
     } = config;
 
     return (
-        <div className="flex flex-col h-full bg-neutral-900 text-white">
+        <div className={`flex flex-col h-full ${appTheme.sidebar} ${appTheme.text}`}>
             {/* Magic Button */}
-            <div className="p-4 border-b border-neutral-800">
+            <div className={`p-4 border-b ${appTheme.border}`}>
                 <button
                     onClick={onRandomize}
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-purple-900/20 group"
@@ -81,22 +85,22 @@ export const Controls: React.FC<ControlsProps> = ({
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-neutral-800">
+            <div className={`flex border-b ${appTheme.border}`}>
                 <button
                     onClick={() => setActiveTab('general')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'general' ? 'text-white border-b-2 border-purple-500' : 'text-neutral-500 hover:text-neutral-300'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'general' ? `${appTheme.text} border-b-2 border-purple-500` : 'text-neutral-500 hover:text-neutral-300'}`}
                 >
                     <Type size={16} /> {t('tab.content', currentLang)}
                 </button>
                 <button
                     onClick={() => setActiveTab('style')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'style' ? 'text-white border-b-2 border-purple-500' : 'text-neutral-500 hover:text-neutral-300'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'style' ? `${appTheme.text} border-b-2 border-purple-500` : 'text-neutral-500 hover:text-neutral-300'}`}
                 >
                     <Palette size={16} /> {t('tab.style', currentLang)}
                 </button>
                 <button
                     onClick={() => setActiveTab('layout')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'layout' ? 'text-white border-b-2 border-purple-500' : 'text-neutral-500 hover:text-neutral-300'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'layout' ? `${appTheme.text} border-b-2 border-purple-500` : 'text-neutral-500 hover:text-neutral-300'}`}
                 >
                     <Layout size={16} /> {t('tab.layout', currentLang)}
                 </button>
@@ -109,36 +113,36 @@ export const Controls: React.FC<ControlsProps> = ({
                 {activeTab === 'general' && (
                     <div className="space-y-5">
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('label.textContent', currentLang)}</label>
+                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.textContent', currentLang)}</label>
                             <div className="space-y-3">
                                 <input
                                     type="text"
                                     value={title}
                                     onChange={(e) => handleChange('title', e.target.value)}
                                     placeholder={t('placeholder.title', currentLang)}
-                                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                                    className={`w-full ${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all`}
                                 />
                                 <input
                                     type="text"
                                     value={subtitle}
                                     onChange={(e) => handleChange('subtitle', e.target.value)}
                                     placeholder={t('placeholder.subtitle', currentLang)}
-                                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                                    className={`w-full ${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all`}
                                 />
                                 <input
                                     type="text"
                                     value={author}
                                     onChange={(e) => handleChange('author', e.target.value)}
                                     placeholder={t('placeholder.author', currentLang)}
-                                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                                    className={`w-full ${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all`}
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('label.typography', currentLang)}</label>
+                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.typography', currentLang)}</label>
                             <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-neutral-800 rounded-lg p-1 flex">
+                                <div className={`${appTheme.sidebar} rounded-lg p-1 flex`}>
                                     {['left', 'center', 'right'].map((align) => (
                                         <button
                                             key={align}
@@ -154,7 +158,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                 <select
                                     value={titleSize}
                                     onChange={(e) => handleChange('titleSize', e.target.value as any)}
-                                    className="bg-neutral-800 border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500"
+                                    className={`${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}
                                 >
                                     <option value="small">{t('size.small', currentLang)}</option>
                                     <option value="medium">{t('size.medium', currentLang)}</option>
@@ -196,9 +200,9 @@ export const Controls: React.FC<ControlsProps> = ({
                                     />
                                     <label
                                         htmlFor="bg-upload"
-                                        className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-neutral-700 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-neutral-800/50 transition-all"
+                                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed ${appTheme.border} rounded-lg cursor-pointer hover:border-purple-500 hover:${appTheme.sidebar}/50 transition-all`}
                                     >
-                                        <Upload size={24} className="text-neutral-500 mb-2" />
+                                        <Upload size={24} className={`text-neutral-500 mb-2`} />
                                         <span className="text-xs text-neutral-400">{t('upload.text', currentLang)}</span>
                                     </label>
                                 </div>
@@ -314,30 +318,51 @@ export const Controls: React.FC<ControlsProps> = ({
                             <div className="space-y-2">
                                 <label className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg border border-neutral-700 cursor-pointer hover:bg-neutral-750 transition-colors">
                                     <span className="text-sm text-neutral-300">{t('label.showAuthor', currentLang)}</span>
-                                    <input
-                                        type="checkbox"
-                                        checked={showAuthor}
-                                        onChange={(e) => handleChange('showAuthor', e.target.checked)}
-                                        className="w-4 h-4 rounded border-neutral-600 text-purple-600 focus:ring-purple-500 bg-neutral-700"
-                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleChange('showAuthor', !showAuthor)}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 ${
+                                            showAuthor ? 'bg-purple-600' : 'bg-neutral-600'
+                                        }`}
+                                    >
+                                        <span
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                                showAuthor ? 'translate-x-6' : 'translate-x-1'
+                                            }`}
+                                        />
+                                    </button>
                                 </label>
                                 <label className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg border border-neutral-700 cursor-pointer hover:bg-neutral-750 transition-colors">
                                     <span className="text-sm text-neutral-300">{t('label.showIcon', currentLang)}</span>
-                                    <input
-                                        type="checkbox"
-                                        checked={showIcon}
-                                        onChange={(e) => handleChange('showIcon', e.target.checked)}
-                                        className="w-4 h-4 rounded border-neutral-600 text-purple-600 focus:ring-purple-500 bg-neutral-700"
-                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleChange('showIcon', !showIcon)}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 ${
+                                            showIcon ? 'bg-purple-600' : 'bg-neutral-600'
+                                        }`}
+                                    >
+                                        <span
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                                showIcon ? 'translate-x-6' : 'translate-x-1'
+                                            }`}
+                                        />
+                                    </button>
                                 </label>
                                 <label className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg border border-neutral-700 cursor-pointer hover:bg-neutral-750 transition-colors">
                                     <span className="text-sm text-neutral-300">{t('label.showDecoration', currentLang)}</span>
-                                    <input
-                                        type="checkbox"
-                                        checked={showDecoration}
-                                        onChange={(e) => handleChange('showDecoration', e.target.checked)}
-                                        className="w-4 h-4 rounded border-neutral-600 text-purple-600 focus:ring-purple-500 bg-neutral-700"
-                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleChange('showDecoration', !showDecoration)}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 ${
+                                            showDecoration ? 'bg-purple-600' : 'bg-neutral-600'
+                                        }`}
+                                    >
+                                        <span
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                                showDecoration ? 'translate-x-6' : 'translate-x-1'
+                                            }`}
+                                        />
+                                    </button>
                                 </label>
                             </div>
                         </div>
