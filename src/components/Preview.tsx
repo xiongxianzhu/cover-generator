@@ -305,7 +305,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
     return (
         <div
-            className="overflow-hidden shadow-2xl rounded-sm transition-all duration-300 ease-in-out origin-center transform"
+            className="overflow-hidden shadow-2xl rounded-sm transition-all duration-300 ease-in-out origin-center"
             style={{
                 width: dimensions.width,
                 height: dimensions.height,

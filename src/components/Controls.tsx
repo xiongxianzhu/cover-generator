@@ -174,7 +174,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                 <select
                                     value={titleSize}
                                     onChange={(e) => handleChange('titleSize', e.target.value as any)}
-                                    className={`input-${currentTheme} input-focus-animate input-glass select-enhanced cursor-pointer`}
+                                    className={`w-full px-3 py-2 rounded-lg border ${appTheme.buttonBorder} ${appTheme.input} bg-opacity-80 backdrop-blur-sm cursor-pointer transition-all duration-200 hover:bg-opacity-100 focus:outline-none focus:ring-2 focus:ring-purple-500`}
                                 >
                                     <option value="small">{t('size.small', currentLang)}</option>
                                     <option value="medium">{t('size.medium', currentLang)}</option>
@@ -189,7 +189,7 @@ export const Controls: React.FC<ControlsProps> = ({
                 {activeTab === 'style' && (
                     <div className="space-y-5">
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.background', currentLang)}</label>
+                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.background', currentLang)}</label>
                             <div className="grid grid-cols-2 gap-2">
                                 {['solid', 'gradient', 'pattern', 'image'].map((type) => (
                                     <button
@@ -226,7 +226,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                 <>
                                     {backgroundType === 'gradient' && (
                                         <div className="space-y-3">
-                                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">渐变预设</label>
+                                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>渐变预设</label>
                                             <div className="grid grid-cols-2 gap-2">
                                                 {['custom', 'sunset', 'ocean', 'forest', 'candy', 'aurora', 'flame'].map((preset) => (
                                                     <button
@@ -263,7 +263,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         {/* Pattern Selection */}
                         {backgroundType !== 'image' && (
                             <div className="space-y-3">
-                                <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">几何纹理</label>
+                                <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>几何纹理</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {['none', 'dots', 'lines', 'waves', 'grid', 'triangles'].map((p) => (
                                         <button
@@ -283,7 +283,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.theme', currentLang)}</label>
+                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.theme', currentLang)}</label>
                             <div className="grid grid-cols-2 gap-2">
                                 {['modern', 'classic', 'bold', 'minimal'].map((tVal) => (
                                     <button
@@ -306,7 +306,7 @@ export const Controls: React.FC<ControlsProps> = ({
                 {activeTab === 'layout' && (
                     <div className="space-y-5">
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.aspectRatio', currentLang)}</label>
+                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.aspectRatio', currentLang)}</label>
                             <div className="grid grid-cols-3 gap-2">
                                 <button
                                     onClick={() => handleChange('aspectRatio', '16:9')}
@@ -333,7 +333,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         </div>
 
                         <div className="space-y-3">
-                            <label className="text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70">{t('label.visibility', currentLang)}</label>
+                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.visibility', currentLang)}</label>
                             <div className="space-y-2">
                                 <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded-xl ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
                                     <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showAuthor', currentLang)}</span>
@@ -397,7 +397,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         <button
                             onClick={onZoomOut}
                             disabled={zoomLevel <= 20}
-                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg ${appTheme.hover} transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.05] active:scale-[0.95] shadow-sm hover:shadow-md`}
+                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`}
                             title={`${t('zoom.out', currentLang)} (-)`}
                         >
                             <ZoomOut size={16} />
@@ -408,14 +408,14 @@ export const Controls: React.FC<ControlsProps> = ({
                         <button
                             onClick={onZoomIn}
                             disabled={zoomLevel >= 150}
-                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg ${appTheme.hover} transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.05] active:scale-[0.95] shadow-sm hover:shadow-md`}
+                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`}
                             title={`${t('zoom.in', currentLang)} (+)`}
                         >
                             <ZoomIn size={16} />
                         </button>
                         <button
                             onClick={onZoomReset}
-                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg ${appTheme.hover} transition-all duration-200 transform hover:scale-[1.05] active:scale-[0.95] shadow-sm hover:shadow-md`}
+                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg transition-all duration-200`}
                             title={`${t('zoom.reset', currentLang)} (0)`}
                         >
                             <RotateCcw size={16} />
@@ -432,7 +432,7 @@ export const Controls: React.FC<ControlsProps> = ({
                 <button
                     onClick={onDownload}
                     disabled={isDownloading}
-                    className="w-full bg-gradient-to-r from-white via-neutral-100 to-neutral-200 text-black font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:from-neutral-100 hover:via-neutral-200 hover:to-neutral-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl border border-neutral-300"
+                    className="w-full bg-gradient-to-r from-white via-neutral-100 to-neutral-200 text-black font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isDownloading ? (
                         <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />

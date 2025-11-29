@@ -86,7 +86,7 @@ export const Layout: React.FC<LayoutProps> = ({
                                                 setCurrentTheme(key as AppTheme);
                                                 setShowThemeDropdown(false);
                                             }}
-                                            className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentTheme === key ? 'bg-white/20 text-purple-300 font-medium' : ''} ${theme.text} transform hover:scale-[1.02]`}
+                                            className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentTheme === key ? 'bg-white/20 text-purple-300 font-medium' : ''} ${theme.text}`}
                                         >
                                             <span className="flex items-center gap-2">
                                                 <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${key === 'cyberpunk' ? 'from-purple-500 to-pink-500' : key === 'forest' ? 'from-green-500 to-emerald-500' : key === 'ocean' ? 'from-blue-500 to-cyan-500' : key === 'sunset' ? 'from-orange-500 to-yellow-500' : key === 'aurora' ? 'from-teal-500 to-lime-500' : 'from-gray-500 to-gray-600'}`}></div>
@@ -114,7 +114,7 @@ export const Layout: React.FC<LayoutProps> = ({
                                             onToggleLanguage('zh-CN');
                                             setShowLangDropdown(false);
                                         }}
-                                        className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentLang === 'zh-CN' ? 'bg-white/20 text-red-300 font-medium' : ''} ${theme.text} transform hover:scale-[1.02]`}
+                                        className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentLang === 'zh-CN' ? 'bg-white/20 text-red-300 font-medium' : ''} ${theme.text}`}
                                     >
                                         <span className="flex items-center gap-2">
                                             <span className="text-red-400">🇨🇳</span>
@@ -126,7 +126,7 @@ export const Layout: React.FC<LayoutProps> = ({
                                             onToggleLanguage('en');
                                             setShowLangDropdown(false);
                                         }}
-                                        className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentLang === 'en' ? 'bg-white/20 text-blue-300 font-medium' : ''} ${theme.text} transform hover:scale-[1.02]`}
+                                        className={`w-full text-left px-3 py-2 text-sm hover:bg-white/10 transition-all duration-200 ${currentLang === 'en' ? 'bg-white/20 text-blue-300 font-medium' : ''} ${theme.text}`}
                                     >
                                         <span className="flex items-center gap-2">
                                             <span className="text-blue-400">🇺🇸</span>
