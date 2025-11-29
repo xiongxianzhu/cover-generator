@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-这是一个技术封面生成器（Cover Generator），用于创建高质量的技术相关封面图片。支持实时预览、多种主题、自定义文本和背景配置。
+这是一个技术封面生成器（Cover Generator），用于创建高质量的技术相关封面图片。支持实时预览、多种主题、自定义文本和背景配置、响应式设计，以及强大的缩放和国际化功能。
 
 ## 常用命令
 
@@ -30,20 +30,31 @@ vite build               # 构建项目
 - **构建工具**: Vite 7.2.4
 - **样式**: Tailwind CSS 4.1.17 + PostCSS
 - **图标**: Lucide React
-- **图片导出**: html-to-image
+- **图片导出**: html-to-image (高质量PNG导出)
 - **代码质量**: ESLint + TypeScript ESLint
+- **UI组件**: 自定义UI组件库 (Button, Input, Label, Select, Switch, Card)
 
 ### 核心组件结构
 ```
 src/
 ├── components/
-│   ├── App.tsx       # 主应用组件，状态管理
-│   ├── Layout.tsx    # 响应式布局组件
-│   ├── Preview.tsx   # 封面预览组件
-│   └── Controls.tsx  # 控制面板组件
-├── utils/i18n.ts     # 国际化工具（中英文切换）
-├── types.ts          # TypeScript 类型定义
-└── main.tsx          # 应用入口
+│   ├── ui/              # 自定义UI组件库
+│   │   ├── button.tsx   # 按钮组件
+│   │   ├── input.tsx    # 输入框组件
+│   │   ├── label.tsx    # 标签组件
+│   │   ├── select.tsx   # 下拉选择组件
+│   │   ├── switch.tsx   # 开关组件
+│   │   └── card.tsx     # 卡片组件
+│   ├── App.tsx          # 主应用组件，状态管理
+│   ├── Layout.tsx       # 响应式布局组件
+│   ├── Preview.tsx      # 封面预览组件
+│   └── Controls.tsx     # 控制面板组件
+├── utils/
+│   ├── i18n.ts          # 国际化工具（中英文切换）
+│   └── cn.ts           # 中文字符串处理
+├── types.ts            # TypeScript 类型定义
+├── types/theme.ts      # 主题类型定义
+└── main.tsx            # 应用入口
 ```
 
 ### 状态管理
@@ -51,8 +62,19 @@ src/
 - `content`: 封面内容（标题、副标题、作者）
 - `theme`: 当前主题（modern, classic, bold, minimal）
 - `backgroundColor`: 背景色配置
+- `textColor`: 文字颜色配置
 - `backgroundType`: 背景类型（solid, gradient, pattern, image）
-- `aspectRatio`: 宽高比配置
+- `pattern`: 几何图案（none, dots, lines, waves, grid, triangles）
+- `gradientPreset`: 渐变预设（custom, sunset, ocean, forest, candy, aurora, flame）
+- `aspectRatio`: 宽高比配置（16:9, 1:1, 9:16）
+- `titleAlignment`: 标题对齐方式（left, center, right）
+- `titleSize`: 标题大小（small, medium, large）
+- `showAuthor`: 显示作者开关
+- `showIcon`: 显示图标开关
+- `showDecoration`: 显示装饰开关
+- `zoomLevel`: 缩放级别（20% - 150%）
+- `currentLang`: 当前语言（zh-CN, en-US）
+- `currentTheme`: 应用主题（cyberpunk, 等）
 
 ## 配置文件
 

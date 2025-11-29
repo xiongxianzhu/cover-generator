@@ -155,40 +155,42 @@ export const Layout: React.FC<LayoutProps> = ({
             </header>
 
             {/* Main Content Area */}
-            <div className={`flex-1 ${theme.bg} ${theme.text} flex flex-col md:flex-row overflow-hidden`}>
+            <div className={`flex-1 ${theme.bg} ${theme.text} flex flex-col lg:flex-row overflow-hidden`}>
                 {/* Sidebar / Controls Panel */}
-                <aside className={`w-full md:w-[400px] ${theme.sidebar} border-r ${theme.border} flex flex-col h-full z-20 shadow-2xl ${currentTheme === 'cyberpunk' ? 'glass-effect-cyberpunk' : currentTheme === 'forest' ? 'glass-effect-forest' : currentTheme === 'ocean' ? 'glass-effect-ocean' : currentTheme === 'sunset' ? 'glass-effect-sunset' : currentTheme === 'aurora' ? 'glass-effect-aurora' : 'glass-effect-dark'}`}>
+                <aside className={`w-full lg:w-96 xl:w-[400px] ${theme.sidebar} border-r ${theme.border} flex flex-col h-full z-20 shadow-2xl ${currentTheme === 'cyberpunk' ? 'glass-effect-cyberpunk' : currentTheme === 'forest' ? 'glass-effect-forest' : currentTheme === 'ocean' ? 'glass-effect-ocean' : currentTheme === 'sunset' ? 'glass-effect-sunset' : currentTheme === 'aurora' ? 'glass-effect-aurora' : 'glass-effect-dark'}`}>
                     {/* Controls Content */}
                     <div className={`flex-1 overflow-hidden flex flex-col ${theme.sidebar} ${theme.text}`}>
                         {sidebar}
                     </div>
                 </aside>
 
-                {/* Main Preview Area */}
-                <main
-                    className={`flex-1 ${theme.bg} relative flex items-center justify-center overflow-hidden p-8`}
-                    onWheel={onWheel}
-                >
-                    {/* Animated Grid Background */}
-                    <div className="absolute inset-0 opacity-10 pointer-events-none"
-                        style={{
-                            backgroundImage: `linear-gradient(${currentTheme === 'cyberpunk' ? '#a855f7' : currentTheme === 'forest' ? '#22c55e' : currentTheme === 'ocean' ? '#3b82f6' : currentTheme === 'sunset' ? '#f97316' : currentTheme === 'aurora' ? '#14b8a6' : '#333'} 1px, transparent 1px), linear-gradient(90deg, ${currentTheme === 'cyberpunk' ? '#a855f7' : currentTheme === 'forest' ? '#22c55e' : currentTheme === 'ocean' ? '#3b82f6' : currentTheme === 'sunset' ? '#f97316' : currentTheme === 'aurora' ? '#14b8a6' : '#333'} 1px, transparent 1px)`,
-                            backgroundSize: '60px 60px',
-                            animation: 'grid 20s linear infinite'
-                        }}
-                    />
+                {/* Main Preview Area - 为移动端添加外部滚动容器 */}
+                <div className="flex-1 overflow-auto flex w-full">
+                    <main
+                        className={`flex-1 ${theme.bg} relative flex items-center justify-center p-2 xs:p-4 sm:p-6 md:p-8 w-full min-h-0 h-full`}
+                        onWheel={onWheel}
+                    >
+                        {/* Animated Grid Background */}
+                        <div className="absolute inset-0 opacity-10 pointer-events-none"
+                            style={{
+                                backgroundImage: `linear-gradient(${currentTheme === 'cyberpunk' ? '#a855f7' : currentTheme === 'forest' ? '#22c55e' : currentTheme === 'ocean' ? '#3b82f6' : currentTheme === 'sunset' ? '#f97316' : currentTheme === 'aurora' ? '#14b8a6' : '#333'} 1px, transparent 1px), linear-gradient(90deg, ${currentTheme === 'cyberpunk' ? '#a855f7' : currentTheme === 'forest' ? '#22c55e' : currentTheme === 'ocean' ? '#3b82f6' : currentTheme === 'sunset' ? '#f97316' : currentTheme === 'aurora' ? '#14b8a6' : '#333'} 1px, transparent 1px)`,
+                                backgroundSize: '40px 40px',
+                                animation: 'grid 20s linear infinite'
+                            }}
+                        />
 
-                    {/* Enhanced Radial Gradient for focus */}
-                    <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,${currentTheme === 'cyberpunk' ? 'rgba(168,85,247,0.08)' : currentTheme === 'forest' ? 'rgba(34,197,94,0.08)' : currentTheme === 'ocean' ? 'rgba(59,130,246,0.08)' : currentTheme === 'sunset' ? 'rgba(249,115,22,0.08)' : currentTheme === 'aurora' ? 'rgba(20,184,166,0.08)' : 'rgba(255,255,255,0.03)'}_0,transparent_70%)] pointer-events-none`} />
+                        {/* Enhanced Radial Gradient for focus */}
+                        <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,${currentTheme === 'cyberpunk' ? 'rgba(168,85,247,0.08)' : currentTheme === 'forest' ? 'rgba(34,197,94,0.08)' : currentTheme === 'ocean' ? 'rgba(59,130,246,0.08)' : currentTheme === 'sunset' ? 'rgba(249,115,22,0.08)' : currentTheme === 'aurora' ? 'rgba(20,184,166,0.08)' : 'rgba(255,255,255,0.03)'}_0,transparent_70%)] pointer-events-none`} />
 
-                    {/* Ambient light effect */}
-                    <div className={`absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-30 pointer-events-none animate-pulse ${currentTheme === 'cyberpunk' ? 'bg-purple-600/20' : currentTheme === 'forest' ? 'bg-green-600/20' : currentTheme === 'ocean' ? 'bg-blue-600/20' : currentTheme === 'sunset' ? 'bg-orange-600/20' : currentTheme === 'aurora' ? 'bg-teal-600/20' : 'bg-gray-600/20'}`} />
+                        {/* Ambient light effect */}
+                        <div className={`absolute top-0 left-0 w-64 h-64 rounded-full blur-2xl opacity-20 pointer-events-none animate-pulse ${currentTheme === 'cyberpunk' ? 'bg-purple-600/20' : currentTheme === 'forest' ? 'bg-green-600/20' : currentTheme === 'ocean' ? 'bg-blue-600/20' : currentTheme === 'sunset' ? 'bg-orange-600/20' : currentTheme === 'aurora' ? 'bg-teal-600/20' : 'bg-gray-600/20'}`} />
 
-                    {/* Content Container */}
-                    <div className="relative z-10 w-full h-full flex items-center justify-center p-4">
-                        {children}
-                    </div>
-                </main>
+                        {/* Content Container */}
+                        <div className="relative z-10 w-full h-full flex items-center justify-center p-2 xs:p-4 min-h-0 max-h-full">
+                            {children}
+                        </div>
+                    </main>
+                </div>
             </div>
 
             {/* Bottom Footer */}

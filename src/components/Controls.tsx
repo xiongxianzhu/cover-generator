@@ -121,7 +121,7 @@ export const Controls: React.FC<ControlsProps> = ({
             </div>
 
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-2 xs:p-4 sm:p-6 space-y-4 xs:space-y-6 custom-scrollbar">
 
                 {/* General Tab */}
                 {activeTab === 'general' && (
@@ -134,49 +134,49 @@ export const Controls: React.FC<ControlsProps> = ({
                                     value={title}
                                     onChange={(e) => handleChange('title', e.target.value)}
                                     placeholder={t('placeholder.title', currentLang)}
-                                    className={`${appTheme.input} input-focus-animate`}
+                                    className={`${appTheme.input} input-focus-animate text-sm sm:text-base`}
                                 />
                                 <input
                                     type="text"
                                     value={subtitle}
                                     onChange={(e) => handleChange('subtitle', e.target.value)}
                                     placeholder={t('placeholder.subtitle', currentLang)}
-                                    className={`${appTheme.input} input-focus-animate`}
+                                    className={`${appTheme.input} input-focus-animate text-sm sm:text-base`}
                                 />
                                 <input
                                     type="text"
                                     value={author}
                                     onChange={(e) => handleChange('author', e.target.value)}
                                     placeholder={t('placeholder.author', currentLang)}
-                                    className={`${appTheme.input} input-focus-animate`}
+                                    className={`${appTheme.input} input-focus-animate text-sm sm:text-base`}
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-3">
                             <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.typography', currentLang)}</label>
-                            <div className="grid grid-cols-2 gap-3">
-                                <div className={`${appTheme.sidebar} rounded p-1.5 flex shadow-sm ${appTheme.buttonBorder}`}>
+                            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3">
+                                <div className={`${appTheme.sidebar} rounded p-1 flex shadow-sm ${appTheme.buttonBorder}`}>
                                     {['left', 'center', 'right'].map((align) => (
                                         <button
                                             key={align}
                                             onClick={() => handleChange('titleAlignment', align as any)}
-                                            className={`flex-1 p-2.5 rounded flex items-center justify-center transition-all duration-200 transform ${titleAlignment === align
+                                            className={`flex-1 p-1.5 rounded xs:p-2 sm:p-2.5 flex items-center justify-center transition-all duration-200 transform ${titleAlignment === align
                                                 ? `${appTheme.active} shadow-md scale-[1.05]`
                                                 : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/50 hover:scale-[1.02]'}`}
                                         >
-                                            {align === 'left' && <AlignLeft size={16} />}
-                                            {align === 'center' && <AlignCenter size={16} />}
-                                            {align === 'right' && <AlignRight size={16} />}
+                                            {align === 'left' && <AlignLeft size={14} className="xs:size-16" />}
+                                            {align === 'center' && <AlignCenter size={14} className="xs:size-16" />}
+                                            {align === 'right' && <AlignRight size={14} className="xs:size-16" />}
                                         </button>
                                     ))}
                                 </div>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="grid grid-cols-3 gap-1 xs:gap-2">
                                     {['small', 'medium', 'large'].map((size) => (
                                         <button
                                             key={size}
                                             onClick={() => handleChange('titleSize', size as any)}
-                                            className={`px-3 py-2 rounded border transition-colors duration-150 text-sm ${
+                                            className={`px-2 py-1.5 rounded border transition-colors duration-150 text-xs xs:text-sm ${
                                                 titleSize === size
                                                     ? 'bg-white/15 text-white font-medium border-white/20'
                                                     : 'text-white/70 border-white/10 bg-white/5 hover:bg-white/10 hover:text-white'
@@ -403,31 +403,31 @@ export const Controls: React.FC<ControlsProps> = ({
                         <button
                             onClick={onZoomOut}
                             disabled={zoomLevel <= 20}
-                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`}
+                            className={`p-2 ${appTheme.button} ${appTheme.buttonBorder} rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`}
                             title={`${t('zoom.out', currentLang)} (-)`}
                         >
                             <ZoomOut size={16} />
                         </button>
-                        <div className={`flex-1 text-center ${appTheme.button} rounded px-3 py-2 ${appTheme.buttonBorder} shadow-sm`}>
+                        <div className={`flex-1 text-center ${appTheme.button} rounded px-2 py-2 ${appTheme.buttonBorder} shadow-sm`}>
                             <span className={`text-sm font-bold ${appTheme.accent}`}>{zoomLevel}%</span>
                         </div>
                         <button
                             onClick={onZoomIn}
                             disabled={zoomLevel >= 150}
-                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`}
+                            className={`p-2 ${appTheme.button} ${appTheme.buttonBorder} rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed`}
                             title={`${t('zoom.in', currentLang)} (+)`}
                         >
                             <ZoomIn size={16} />
                         </button>
                         <button
                             onClick={onZoomReset}
-                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded transition-all duration-200`}
+                            className={`p-2 ${appTheme.button} ${appTheme.buttonBorder} rounded transition-all duration-200`}
                             title={`${t('zoom.reset', currentLang)} (0)`}
                         >
                             <RotateCcw size={16} />
                         </button>
                     </div>
-                    <div className={`text-xs ${appTheme.text} opacity-60 text-center`}>
+                    <div className={`text-[0.6rem] xs:text-xs ${appTheme.text} opacity-60 text-center`}>
                         {t('zoom.shortcuts', currentLang)}
                     </div>
                 </div>
@@ -438,7 +438,7 @@ export const Controls: React.FC<ControlsProps> = ({
                 <button
                     onClick={onDownload}
                     disabled={isDownloading}
-                    className="w-full bg-gradient-to-r from-white via-neutral-100 to-neutral-200 text-black font-bold py-3 px-4 rounded flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-white via-neutral-100 to-neutral-200 text-black font-bold py-3 px-4 rounded flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                 >
                     {isDownloading ? (
                         <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />

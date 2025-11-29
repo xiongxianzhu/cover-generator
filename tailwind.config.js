@@ -7,6 +7,10 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '480px',
+        // => @media (min-width: 480px) { ... }
+      },
       borderRadius: {
         lg: '0.25rem',
         md: '0.25rem',

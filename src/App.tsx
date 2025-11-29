@@ -14,7 +14,7 @@ function App() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
   const [currentTheme, setCurrentTheme] = useState<AppTheme>('cyberpunk');
-  const [zoomLevel, setZoomLevel] = useState(80); // 默认80%缩放，更大的初始预览尺寸
+  const [zoomLevel, setZoomLevel] = useState(60); // 默认60%缩放，适配移动端
   const previewRef = useRef<HTMLDivElement>(null);
 
   // 动态设置页面标题

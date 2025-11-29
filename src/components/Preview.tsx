@@ -147,10 +147,10 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
     // Typography Sizes
     const getTitleSize = () => {
         switch (titleSize) {
-            case 'small': return 'text-4xl md:text-5xl';
-            case 'medium': return 'text-6xl md:text-7xl';
-            case 'large': return 'text-7xl md:text-9xl';
-            default: return 'text-6xl';
+            case 'small': return 'text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl';
+            case 'medium': return 'text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl';
+            case 'large': return 'text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl';
+            default: return 'text-3xl sm:text-5xl lg:text-6xl';
         }
     };
 
@@ -253,26 +253,26 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                 <div className="w-full flex justify-between items-start">
                     {showIcon && (
                         <div className={themeStyles.header}>
-                            <Terminal size={48} />
+                            <Terminal size={20} className="xs:size-12 sm:size-12 md:size-12 lg:size-12" />
                         </div>
                     )}
                     {showDecoration && (
                         <div className={themeStyles.decoration}>
-                            <div className="w-3 h-3 rounded-full bg-current" />
-                            <div className="w-3 h-3 rounded-full bg-current" />
-                            <div className="w-3 h-3 rounded-full bg-current" />
+                            <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
+                            <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
+                            <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
                         </div>
                     )}
                 </div>
 
                 {/* Main Content */}
-                <div className={`flex flex-col gap-6 max-w-4xl ${alignClass}`}>
+                <div className={`flex flex-col gap-4 sm:gap-6 max-w-4xl ${alignClass}`}>
 
                     <h1 className={themeStyles.title}>
                         {title}
                     </h1>
 
-                    <p className={themeStyles.subtitle}>
+                    <p className={`${themeStyles.subtitle} text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl`}>
                         {subtitle}
                     </p>
                 </div>
@@ -282,20 +282,22 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     {showAuthor && (
                         <div className={themeStyles.authorContainer}>
                             {themeStyles.authorAvatar !== 'hidden' && (
-                                <div className={themeStyles.authorAvatar}>
+                                <div className={`${themeStyles.authorAvatar} w-6 h-6 text-xs sm:w-8 sm:h-8 sm:text-sm md:w-10 md:h-10 md:text-lg lg:w-12 lg:h-12 lg:text-xl`}>
                                     {author.charAt(0)}
                                 </div>
                             )}
                             <div className="flex flex-col">
-                                <span className={themeStyles.authorLabel}>Author</span>
-                                <span className={themeStyles.authorName}>{author}</span>
+                                <span className={`${themeStyles.authorLabel} text-[0.6rem] xs:text-xs sm:text-sm md:text-base`}>Author</span>
+                                <span className={`${themeStyles.authorName} text-xs xs:text-sm sm:text-base md:text-lg`}>
+                                    {author}
+                                </span>
                             </div>
                         </div>
                     )}
 
                     {showDecoration && themeStyles.decorationIcon !== 'hidden' && (
                         <div className={themeStyles.decorationIcon}>
-                            <Cpu size={32} />
+                            <Cpu size={16} className="xs:size-12 sm:size-12 md:size-12 lg:size-12" />
                         </div>
                     )}
                 </div>
@@ -305,12 +307,14 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
     return (
         <div
-            className="overflow-hidden shadow-2xl rounded-sm transition-all duration-300 ease-in-out origin-center"
-            style={{
-                width: dimensions.width,
-                height: dimensions.height,
-                transform: `scale(${zoomLevel / 100})`
-            }}
+            className="overflow-hidden shadow-2xl rounded-sm transition-all duration-300 ease-in-out origin-center max-w-full"
+            style={
+                {
+                    width: dimensions.width,
+                    height: dimensions.height,
+                    transform: `scale(${zoomLevel / 100})`
+                }
+            }
         >
             <div
                 ref={ref}
