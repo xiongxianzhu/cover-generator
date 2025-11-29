@@ -234,9 +234,6 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                 style={getBackgroundStyle()}
             >
                 {getPatternOverlay()}
-                {/* Glassmorphism Overlay for depth */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-
                 {renderContent()}
             </div>
         </div>

@@ -160,11 +160,9 @@ export const Layout: React.FC<LayoutProps> = ({
                 {/* Ambient light effect */}
                 <div className={`absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-30 pointer-events-none animate-pulse ${currentTheme === 'cyberpunk' ? 'bg-purple-600/20' : currentTheme === 'forest' ? 'bg-green-600/20' : currentTheme === 'ocean' ? 'bg-blue-600/20' : currentTheme === 'sunset' ? 'bg-orange-600/20' : currentTheme === 'aurora' ? 'bg-teal-600/20' : 'bg-gray-600/20'}`} />
 
-                {/* Content Container with glass effect */}
+                {/* Content Container */}
                 <div className="relative z-10 w-full h-full flex items-center justify-center p-4">
-                    <div className="relative w-full h-full max-w-6xl max-h-4xl rounded-2xl overflow-hidden shadow-2xl backdrop-blur-sm border border-white/10">
-                        {children}
-                    </div>
+                    {children}
                 </div>
             </main>
         </div>
