@@ -170,7 +170,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             case 'modern':
                 return {
                     container: 'p-16',
-                    header: 'p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl',
+                    header: 'p-4 bg-white/10 backdrop-blur-md rounded border border-white/20 shadow-xl',
                     title: `${titleClass} font-bold leading-tight tracking-tight drop-shadow-lg`,
                     subtitle: 'text-2xl md:text-3xl font-light opacity-90 leading-relaxed max-w-2xl',
                     authorContainer: 'flex items-center gap-3',
@@ -184,7 +184,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             case 'classic':
                 return {
                     container: 'p-20',
-                    header: 'p-6 bg-white/5 rounded-lg border-2 border-current/30',
+                    header: 'p-6 bg-white/5 rounded border-2 border-current/30',
                     title: `${titleClass} font-serif leading-snug tracking-normal`,
                     subtitle: 'text-xl md:text-2xl font-normal opacity-80 leading-relaxed max-w-3xl',
                     authorContainer: 'flex items-center gap-4',
@@ -198,7 +198,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             case 'bold':
                 return {
                     container: 'p-12',
-                    header: 'p-3 bg-black/20 backdrop-blur-sm rounded-lg',
+                    header: 'p-3 bg-black/20 backdrop-blur-sm rounded',
                     title: `${titleClass} font-black leading-none tracking-tighter uppercase`,
                     subtitle: 'text-3xl md:text-4xl font-bold opacity-95 leading-tight max-w-2xl',
                     authorContainer: 'flex items-center gap-2',
@@ -226,7 +226,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             default:
                 return {
                     container: 'p-16',
-                    header: 'p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl',
+                    header: 'p-4 bg-white/10 backdrop-blur-md rounded border border-white/20 shadow-xl',
                     title: `${titleClass} font-bold leading-tight tracking-tight drop-shadow-lg`,
                     subtitle: 'text-2xl md:text-3xl font-light opacity-90 leading-relaxed max-w-2xl',
                     authorContainer: 'flex items-center gap-3',

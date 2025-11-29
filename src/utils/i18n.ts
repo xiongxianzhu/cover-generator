@@ -58,6 +58,7 @@ export const translations = {
         'theme.ocean': 'Ocean',
         'theme.sunset': 'Sunset',
         'theme.aurora': 'Aurora',
+        'footer.blog': 'Blog',
     },
     'zh-CN': {
         'app.title': '封面生成器',
@@ -116,6 +117,7 @@ export const translations = {
         'theme.ocean': '海洋',
         'theme.sunset': '日落',
         'theme.aurora': '极光',
+        'footer.blog': '博客',
     }
 };
 
