@@ -19,12 +19,14 @@ function App() {
 
   // 动态设置页面标题
   useEffect(() => {
+    // 更新 document.title 以确保浏览器标签页标题正确
+    document.title = t('app.title', currentLang);
+    
+    // 同时更新页面中的标题元素（如果存在）
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) {
       pageTitle.textContent = t('app.title', currentLang);
     }
-    // 同时更新 document.title 以确保浏览器标签页标题正确
-    document.title = t('app.title', currentLang);
   }, [currentLang]);
 
   const toggleLanguage = (lang: Language) => {
