@@ -134,21 +134,21 @@ export const Controls: React.FC<ControlsProps> = ({
                                     value={title}
                                     onChange={(e) => handleChange('title', e.target.value)}
                                     placeholder={t('placeholder.title', currentLang)}
-                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg`}
+                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-300 hover:brightness-110 focus:brightness-110 shadow-sm hover:shadow-lg focus:shadow-xl hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} focus:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`}
                                 />
                                 <input
                                     type="text"
                                     value={subtitle}
                                     onChange={(e) => handleChange('subtitle', e.target.value)}
                                     placeholder={t('placeholder.subtitle', currentLang)}
-                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg`}
+                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-300 hover:brightness-110 focus:brightness-110 shadow-sm hover:shadow-lg focus:shadow-xl hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} focus:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`}
                                 />
                                 <input
                                     type="text"
                                     value={author}
                                     onChange={(e) => handleChange('author', e.target.value)}
                                     placeholder={t('placeholder.author', currentLang)}
-                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg`}
+                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-300 hover:brightness-110 focus:brightness-110 shadow-sm hover:shadow-lg focus:shadow-xl hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} focus:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`}
                                 />
                             </div>
                         </div>
@@ -174,7 +174,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                 <select
                                     value={titleSize}
                                     onChange={(e) => handleChange('titleSize', e.target.value as any)}
-                                    className={`${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg cursor-pointer`}
+                                    className={`${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-300 hover:brightness-110 focus:brightness-110 shadow-sm hover:shadow-lg focus:shadow-xl hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} focus:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} cursor-pointer`}
                                 >
                                     <option value="small">{t('size.small', currentLang)}</option>
                                     <option value="medium">{t('size.medium', currentLang)}</option>
@@ -250,7 +250,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                                     type="color"
                                                     value={backgroundColor}
                                                     onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                                                    className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-2 border-neutral-600 hover:border-purple-500 transition-colors duration-200 shadow-sm"
+                                                    className={`w-10 h-10 rounded-lg cursor-pointer bg-transparent border-2 border-neutral-600 hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} transition-colors duration-200 shadow-sm`}
                                                 />
                                                 <div className="absolute inset-0 rounded-lg pointer-events-none" style={{ backgroundColor, opacity: 0.2 }}></div>
                                             </div>

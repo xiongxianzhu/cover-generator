@@ -11,7 +11,7 @@ interface LayoutProps {
     onToggleLanguage: (lang: Language) => void;
     currentTheme?: AppTheme;
     onThemeChange?: (theme: AppTheme) => void;
-    onWheel?: (event: WheelEvent) => void;
+    onWheel?: (event: React.WheelEvent<HTMLElement>) => void;
 }
 
 export const Layout: React.FC<LayoutProps> = ({

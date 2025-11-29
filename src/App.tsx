@@ -44,7 +44,7 @@ function App() {
   };
 
   // 鼠标滚轮缩放处理
-  const handleWheel = (event: WheelEvent) => {
+  const handleWheel = (event: React.WheelEvent<HTMLElement>) => {
     // 直接响应滚轮，无需按Ctrl键
     event.preventDefault();
 
@@ -66,7 +66,7 @@ function App() {
       const wheelHandler = (event: WheelEvent) => {
         // 只有当鼠标在主区域内时才响应滚轮事件
         if (event.target instanceof Element && mainElement.contains(event.target)) {
-          handleWheel(event);
+          handleWheel(event as unknown as React.WheelEvent<HTMLElement>);
         }
       };
 

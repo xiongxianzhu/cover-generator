@@ -1,12 +1,12 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef, useEffect, WheelEvent } from 'react';
 import type { CoverConfig } from '../types';
 import { gradientPresets, geometricPatterns } from '../types';
-import { Terminal, Code2, Cpu } from 'lucide-react';
+import { Terminal, Cpu } from 'lucide-react';
 
 interface PreviewProps {
     config: CoverConfig;
     zoomLevel?: number;
-    onWheel?: (event: WheelEvent) => void;
+    onWheel?: (event: React.WheelEvent<HTMLElement>) => void;
 }
 
 export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomLevel = 60, onWheel }, ref) => {
@@ -36,10 +36,21 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
         const containerElement = previewElement.current;
 
         if (containerElement && onWheel) {
-            containerElement.addEventListener('wheel', onWheel as EventListener, { passive: false });
+            const handleWheel = (event: Event) => {
+                const wheelEvent = event as unknown as WheelEvent;
+                const reactWheelEvent = {
+                    ...wheelEvent,
+                    nativeEvent: wheelEvent as unknown as WheelEvent,
+                    isDefaultPrevented: () => wheelEvent.defaultPrevented,
+                    isPropagationStopped: () => false,
+                    persist: () => {},
+                } as unknown as React.WheelEvent<HTMLElement>;
+                onWheel(reactWheelEvent);
+            };
+            containerElement.addEventListener('wheel', handleWheel, { passive: false });
 
             return () => {
-                containerElement.removeEventListener('wheel', onWheel as EventListener);
+                containerElement.removeEventListener('wheel', handleWheel);
             };
         }
     }, [onWheel, ref]);
@@ -153,23 +164,100 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
         }
     };
 
+    // Theme Styles
+    const getThemeStyles = (titleClass: string) => {
+        switch (config.theme) {
+            case 'modern':
+                return {
+                    container: 'p-16',
+                    header: 'p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl',
+                    title: `${titleClass} font-bold leading-tight tracking-tight drop-shadow-lg`,
+                    subtitle: 'text-2xl md:text-3xl font-light opacity-90 leading-relaxed max-w-2xl',
+                    authorContainer: 'flex items-center gap-3',
+                    authorAvatar: 'w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg',
+                    authorLabel: 'text-sm opacity-60 uppercase tracking-wider',
+                    authorName: 'font-medium text-lg',
+                    footer: 'w-full flex justify-between items-end border-t border-current/20 pt-8',
+                    decoration: 'flex gap-2 opacity-50',
+                    decorationIcon: 'opacity-50'
+                };
+            case 'classic':
+                return {
+                    container: 'p-20',
+                    header: 'p-6 bg-white/5 rounded-lg border-2 border-current/30',
+                    title: `${titleClass} font-serif leading-snug tracking-normal`,
+                    subtitle: 'text-xl md:text-2xl font-normal opacity-80 leading-relaxed max-w-3xl',
+                    authorContainer: 'flex items-center gap-4',
+                    authorAvatar: 'w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white font-serif text-xl',
+                    authorLabel: 'text-sm opacity-70 uppercase tracking-wide',
+                    authorName: 'font-serif text-xl',
+                    footer: 'w-full flex justify-between items-end border-t-2 border-current/40 pt-10',
+                    decoration: 'flex gap-3 opacity-60',
+                    decorationIcon: 'opacity-60'
+                };
+            case 'bold':
+                return {
+                    container: 'p-12',
+                    header: 'p-3 bg-black/20 backdrop-blur-sm rounded-lg',
+                    title: `${titleClass} font-black leading-none tracking-tighter uppercase`,
+                    subtitle: 'text-3xl md:text-4xl font-bold opacity-95 leading-tight max-w-2xl',
+                    authorContainer: 'flex items-center gap-2',
+                    authorAvatar: 'w-8 h-8 rounded-sm bg-gradient-to-r from-red-500 to-pink-500 flex items-center justify-center text-white font-black text-sm',
+                    authorLabel: 'text-xs opacity-80 uppercase tracking-widest',
+                    authorName: 'font-black text-base',
+                    footer: 'w-full flex justify-between items-end border-b-4 border-current/80 pb-6',
+                    decoration: 'flex gap-1 opacity-40',
+                    decorationIcon: 'opacity-40'
+                };
+            case 'minimal':
+                return {
+                    container: 'p-24',
+                    header: 'p-2',
+                    title: `${titleClass} font-thin leading-loose tracking-widest`,
+                    subtitle: 'text-lg md:text-xl font-thin opacity-70 leading-loose max-w-4xl',
+                    authorContainer: 'flex flex-col gap-1',
+                    authorAvatar: 'hidden',
+                    authorLabel: 'text-xs opacity-50 uppercase tracking-widest',
+                    authorName: 'font-thin text-sm',
+                    footer: 'w-full flex justify-between items-end border-t border-current/10 pt-12',
+                    decoration: 'hidden',
+                    decorationIcon: 'hidden'
+                };
+            default:
+                return {
+                    container: 'p-16',
+                    header: 'p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl',
+                    title: `${titleClass} font-bold leading-tight tracking-tight drop-shadow-lg`,
+                    subtitle: 'text-2xl md:text-3xl font-light opacity-90 leading-relaxed max-w-2xl',
+                    authorContainer: 'flex items-center gap-3',
+                    authorAvatar: 'w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg',
+                    authorLabel: 'text-sm opacity-60 uppercase tracking-wider',
+                    authorName: 'font-medium text-lg',
+                    footer: 'w-full flex justify-between items-end border-t border-current/20 pt-8',
+                    decoration: 'flex gap-2 opacity-50',
+                    decorationIcon: 'opacity-50'
+                };
+        }
+    };
+
     // Theme Content
     const renderContent = () => {
         const alignClass = getAlignmentClass();
         const titleClass = getTitleSize();
-
+        const themeStyles = getThemeStyles(titleClass);
+        
         return (
-            <div className={`h-full flex flex-col justify-between p-16 relative z-10 ${alignClass}`}>
+            <div className={`h-full flex flex-col justify-between relative z-10 ${alignClass} ${themeStyles.container}`}>
 
                 {/* Header / Icon */}
                 <div className="w-full flex justify-between items-start">
                     {showIcon && (
-                        <div className="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-xl">
+                        <div className={themeStyles.header}>
                             <Terminal size={48} />
                         </div>
                     )}
                     {showDecoration && (
-                        <div className="flex gap-2 opacity-50">
+                        <div className={themeStyles.decoration}>
                             <div className="w-3 h-3 rounded-full bg-current" />
                             <div className="w-3 h-3 rounded-full bg-current" />
                             <div className="w-3 h-3 rounded-full bg-current" />
@@ -180,31 +268,33 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                 {/* Main Content */}
                 <div className={`flex flex-col gap-6 max-w-4xl ${alignClass}`}>
 
-                    <h1 className={`${titleClass} font-bold leading-tight tracking-tight drop-shadow-lg`}>
+                    <h1 className={themeStyles.title}>
                         {title}
                     </h1>
 
-                    <p className="text-2xl md:text-3xl font-light opacity-90 leading-relaxed max-w-2xl">
+                    <p className={themeStyles.subtitle}>
                         {subtitle}
                     </p>
                 </div>
 
                 {/* Footer / Author */}
-                <div className="w-full flex justify-between items-end border-t border-current/20 pt-8">
+                <div className={themeStyles.footer}>
                     {showAuthor && (
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg">
-                                {author.charAt(0)}
-                            </div>
+                        <div className={themeStyles.authorContainer}>
+                            {themeStyles.authorAvatar !== 'hidden' && (
+                                <div className={themeStyles.authorAvatar}>
+                                    {author.charAt(0)}
+                                </div>
+                            )}
                             <div className="flex flex-col">
-                                <span className="text-sm opacity-60 uppercase tracking-wider">Author</span>
-                                <span className="font-medium text-lg">{author}</span>
+                                <span className={themeStyles.authorLabel}>Author</span>
+                                <span className={themeStyles.authorName}>{author}</span>
                             </div>
                         </div>
                     )}
 
-                    {showDecoration && (
-                        <div className="opacity-50">
+                    {showDecoration && themeStyles.decorationIcon !== 'hidden' && (
+                        <div className={themeStyles.decorationIcon}>
                             <Cpu size={32} />
                         </div>
                     )}
