@@ -58,10 +58,10 @@ export const Layout: React.FC<LayoutProps> = ({
                     <div className="flex items-center gap-2 text-white">
                         <img
                             src="/logo.png"
-                            alt="TechCover Logo"
-                            className="w-8 h-8 rounded-lg object-cover"
+                            alt={t('app.title', currentLang)}
+                            className="w-14 h-14 rounded-lg object-cover"
                         />
-                        <span className="font-bold tracking-tight text-lg">TechCover</span>
+                        <span className="font-bold tracking-tight text-lg">{t('app.title', currentLang)}</span>
                     </div>
 
                     {/* Language and Theme Dropdowns */}

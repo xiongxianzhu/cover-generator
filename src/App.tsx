@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { toPng } from 'html-to-image';
 import { Layout } from './components/Layout';
 import { Preview } from './components/Preview';
@@ -6,6 +6,7 @@ import { Controls } from './components/Controls';
 import type { CoverConfig } from './types';
 import { defaultCoverConfig } from './types';
 import type { Language } from './utils/i18n';
+import { t } from './utils/i18n';
 import { appThemes, type AppTheme } from './types/theme';
 
 function App() {
@@ -14,6 +15,16 @@ function App() {
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
   const [currentTheme, setCurrentTheme] = useState<AppTheme>('dark');
   const previewRef = useRef<HTMLDivElement>(null);
+
+  // 动态设置页面标题
+  useEffect(() => {
+    const pageTitle = document.getElementById('page-title');
+    if (pageTitle) {
+      pageTitle.textContent = t('app.title', currentLang);
+    }
+    // 同时更新 document.title 以确保浏览器标签页标题正确
+    document.title = t('app.title', currentLang);
+  }, [currentLang]);
 
   const toggleLanguage = (lang: Language) => {
     setCurrentLang(lang);

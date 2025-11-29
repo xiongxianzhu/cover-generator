@@ -2,7 +2,7 @@ export type Language = 'en' | 'zh-CN';
 
 export const translations = {
     'en': {
-        'app.title': 'Tech Cover Generator',
+        'app.title': 'Cover Generator',
         'magic.button': 'Magic Generate',
         'tab.content': 'Content',
         'tab.style': 'Style',
@@ -53,7 +53,7 @@ export const translations = {
         'theme.ocean': 'Ocean',
     },
     'zh-CN': {
-        'app.title': '技术封面生成器',
+        'app.title': '封面生成器',
         'magic.button': '一键生成',
         'tab.content': '内容',
         'tab.style': '样式',
