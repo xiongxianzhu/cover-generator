@@ -88,9 +88,9 @@ export const Controls: React.FC<ControlsProps> = ({
             <div className={`p-4 border-b ${appTheme.border}`}>
                 <button
                     onClick={onRandomize}
-                    className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-purple-900/20 group"
+                    className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:from-purple-500 hover:via-blue-500 hover:to-cyan-500 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-purple-900/20 hover:shadow-purple-900/30 group transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm"
                 >
-                    <Wand2 size={18} className="group-hover:rotate-12 transition-transform" />
+                    <Wand2 size={18} className="group-hover:rotate-12 transition-transform duration-300" />
                     {t('magic.button', currentLang)}
                 </button>
             </div>
@@ -99,21 +99,24 @@ export const Controls: React.FC<ControlsProps> = ({
             <div className={`flex border-b ${appTheme.border}`}>
                 <button
                     onClick={() => setActiveTab('general')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'general' ? `${appTheme.text} border-b-2 border-purple-500` : 'text-neutral-500 hover:text-neutral-300'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'general' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/30'}`}
                 >
-                    <Type size={16} /> {t('tab.content', currentLang)}
+                    <Type size={16} className={activeTab === 'general' ? 'text-purple-400' : ''} />
+                    {t('tab.content', currentLang)}
                 </button>
                 <button
                     onClick={() => setActiveTab('style')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'style' ? `${appTheme.text} border-b-2 border-purple-500` : 'text-neutral-500 hover:text-neutral-300'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'style' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/30'}`}
                 >
-                    <Palette size={16} /> {t('tab.style', currentLang)}
+                    <Palette size={16} className={activeTab === 'style' ? 'text-purple-400' : ''} />
+                    {t('tab.style', currentLang)}
                 </button>
                 <button
                     onClick={() => setActiveTab('layout')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${activeTab === 'layout' ? `${appTheme.text} border-b-2 border-purple-500` : 'text-neutral-500 hover:text-neutral-300'}`}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'layout' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/30'}`}
                 >
-                    <Layout size={16} /> {t('tab.layout', currentLang)}
+                    <Layout size={16} className={activeTab === 'layout' ? 'text-purple-400' : ''} />
+                    {t('tab.layout', currentLang)}
                 </button>
             </div>
 
@@ -131,21 +134,21 @@ export const Controls: React.FC<ControlsProps> = ({
                                     value={title}
                                     onChange={(e) => handleChange('title', e.target.value)}
                                     placeholder={t('placeholder.title', currentLang)}
-                                    className={`w-full ${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all`}
+                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg`}
                                 />
                                 <input
                                     type="text"
                                     value={subtitle}
                                     onChange={(e) => handleChange('subtitle', e.target.value)}
                                     placeholder={t('placeholder.subtitle', currentLang)}
-                                    className={`w-full ${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all`}
+                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg`}
                                 />
                                 <input
                                     type="text"
                                     value={author}
                                     onChange={(e) => handleChange('author', e.target.value)}
                                     placeholder={t('placeholder.author', currentLang)}
-                                    className={`w-full ${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all`}
+                                    className={`w-full ${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg`}
                                 />
                             </div>
                         </div>
@@ -153,12 +156,14 @@ export const Controls: React.FC<ControlsProps> = ({
                         <div className="space-y-3">
                             <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.typography', currentLang)}</label>
                             <div className="grid grid-cols-2 gap-3">
-                                <div className={`${appTheme.sidebar} rounded-lg p-1 flex`}>
+                                <div className={`${appTheme.sidebar} rounded-xl p-1.5 flex shadow-sm ${appTheme.buttonBorder}`}>
                                     {['left', 'center', 'right'].map((align) => (
                                         <button
                                             key={align}
                                             onClick={() => handleChange('titleAlignment', align as any)}
-                                            className={`flex-1 p-2 rounded flex items-center justify-center transition-colors ${titleAlignment === align ? 'bg-neutral-700 text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-300'}`}
+                                            className={`flex-1 p-2.5 rounded-lg flex items-center justify-center transition-all duration-200 transform ${titleAlignment === align
+                                                ? `${appTheme.active} shadow-md scale-[1.05]`
+                                                : 'text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800/50 hover:scale-[1.02]'}`}
                                         >
                                             {align === 'left' && <AlignLeft size={16} />}
                                             {align === 'center' && <AlignCenter size={16} />}
@@ -169,7 +174,7 @@ export const Controls: React.FC<ControlsProps> = ({
                                 <select
                                     value={titleSize}
                                     onChange={(e) => handleChange('titleSize', e.target.value as any)}
-                                    className={`${appTheme.sidebar} border ${appTheme.border} rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500`}
+                                    className={`${appTheme.input} rounded-lg px-4 py-3 text-sm transition-all duration-200 transform hover:scale-[1.01] focus:scale-[1.01] shadow-sm hover:shadow-md focus:shadow-lg cursor-pointer`}
                                 >
                                     <option value="small">{t('size.small', currentLang)}</option>
                                     <option value="medium">{t('size.medium', currentLang)}</option>
@@ -190,9 +195,9 @@ export const Controls: React.FC<ControlsProps> = ({
                                     <button
                                         key={type}
                                         onClick={() => handleChange('backgroundType', type as any)}
-                                        className={`px-3 py-2 rounded-lg text-sm border transition-all ${backgroundType === type
-                                            ? 'bg-purple-600/20 border-purple-500 text-purple-200'
-                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                                        className={`px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${backgroundType === type
+                                            ? `${appTheme.active} shadow-lg scale-[1.02] border-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`
+                                            : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
                                             }`}
                                     >
                                         {t(`bg.${type}` as any, currentLang)}
@@ -211,10 +216,10 @@ export const Controls: React.FC<ControlsProps> = ({
                                     />
                                     <label
                                         htmlFor="bg-upload"
-                                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed ${appTheme.border} rounded-lg cursor-pointer hover:border-purple-500 hover:${appTheme.sidebar}/50 transition-all`}
+                                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed ${appTheme.border} rounded-xl cursor-pointer hover:${appTheme.accent}/20 hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} hover:${appTheme.sidebar}/50 transition-all duration-200 group transform hover:scale-[1.01] active:scale-[0.99] backdrop-blur-sm`}
                                     >
-                                        <Upload size={24} className={`text-neutral-500 mb-2`} />
-                                        <span className="text-xs text-neutral-400">{t('upload.text', currentLang)}</span>
+                                        <Upload size={24} className={`text-neutral-500 mb-2 group-hover:${appTheme.accent} transition-colors duration-200`} />
+                                        <span className="text-xs text-neutral-400 group-hover:text-neutral-300 transition-colors duration-200">{t('upload.text', currentLang)}</span>
                                     </label>
                                 </div>
                             ) : (
@@ -227,9 +232,9 @@ export const Controls: React.FC<ControlsProps> = ({
                                                     <button
                                                         key={preset}
                                                         onClick={() => handleChange('gradientPreset', preset as any)}
-                                                        className={`px-3 py-2 rounded-lg text-sm border transition-all ${gradientPreset === preset
-                                                            ? 'bg-purple-600/20 border-purple-500 text-purple-200'
-                                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                                                        className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${gradientPreset === preset
+                                                            ? `${appTheme.active} shadow-lg scale-[1.02]`
+                                                            : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
                                                             }`}
                                                     >
                                                         {t(`gradient.${preset}` as any, currentLang)}
@@ -239,14 +244,17 @@ export const Controls: React.FC<ControlsProps> = ({
                                         </div>
                                     )}
                                     {(backgroundType === 'solid' || (backgroundType === 'gradient' && gradientPreset === 'custom')) && (
-                                        <div className="flex items-center gap-3 bg-neutral-800 p-3 rounded-lg border border-neutral-700">
-                                            <input
-                                                type="color"
-                                                value={backgroundColor}
-                                                onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                                                className="w-8 h-8 rounded cursor-pointer bg-transparent border-0 p-0"
-                                            />
-                                            <span className="text-sm text-neutral-300 font-mono">{backgroundColor}</span>
+                                        <div className={`flex items-center gap-3 ${appTheme.button} p-3 rounded-xl ${appTheme.buttonBorder} shadow-sm hover:shadow-md transition-all duration-200 group`}>
+                                            <div className="relative">
+                                                <input
+                                                    type="color"
+                                                    value={backgroundColor}
+                                                    onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                                                    className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-2 border-neutral-600 hover:border-purple-500 transition-colors duration-200 shadow-sm"
+                                                />
+                                                <div className="absolute inset-0 rounded-lg pointer-events-none" style={{ backgroundColor, opacity: 0.2 }}></div>
+                                            </div>
+                                            <span className={`text-sm ${appTheme.accent} font-mono font-medium group-hover:scale-[1.02] transition-transform duration-200`}>{backgroundColor}</span>
                                         </div>
                                     )}
                                 </>
@@ -261,9 +269,9 @@ export const Controls: React.FC<ControlsProps> = ({
                                         <button
                                             key={p}
                                             onClick={() => handleChange('pattern', p as any)}
-                                            className={`px-3 py-2 rounded-lg text-sm border transition-all ${pattern === p
-                                                ? 'bg-purple-600/20 border-purple-500 text-purple-200'
-                                                : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                                            className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${pattern === p
+                                                ? `${appTheme.active} shadow-lg scale-[1.02]`
+                                                : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
                                                 }`}
                                         >
                                             {t(`pattern.${p}` as any, currentLang)}
@@ -281,9 +289,9 @@ export const Controls: React.FC<ControlsProps> = ({
                                     <button
                                         key={tVal}
                                         onClick={() => handleChange('theme', tVal as any)}
-                                        className={`px-3 py-2 rounded-lg text-sm border transition-all ${theme === tVal
-                                            ? 'bg-purple-600/20 border-purple-500 text-purple-200'
-                                            : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'
+                                        className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${theme === tVal
+                                            ? `${appTheme.active} shadow-lg scale-[1.02]`
+                                            : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`
                                             }`}
                                     >
                                         {t(`theme.${tVal}` as any, currentLang)}
@@ -302,24 +310,24 @@ export const Controls: React.FC<ControlsProps> = ({
                             <div className="grid grid-cols-3 gap-2">
                                 <button
                                     onClick={() => handleChange('aspectRatio', '16:9')}
-                                    className={`p-3 rounded-lg border flex flex-col items-center gap-2 transition-all ${aspectRatio === '16:9' ? 'bg-purple-600/20 border-purple-500 text-purple-200' : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'}`}
+                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '16:9' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`}`}
                                 >
-                                    <Monitor size={20} />
-                                    <span className="text-xs">16:9</span>
+                                    <Monitor size={20} className={aspectRatio === '16:9' ? 'text-purple-400' : ''} />
+                                    <span className={`text-xs font-medium ${aspectRatio === '16:9' ? 'text-purple-200' : 'text-neutral-400'}`}>16:9</span>
                                 </button>
                                 <button
                                     onClick={() => handleChange('aspectRatio', '1:1')}
-                                    className={`p-3 rounded-lg border flex flex-col items-center gap-2 transition-all ${aspectRatio === '1:1' ? 'bg-purple-600/20 border-purple-500 text-purple-200' : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'}`}
+                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '1:1' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`}`}
                                 >
-                                    <Instagram size={20} />
-                                    <span className="text-xs">1:1</span>
+                                    <Instagram size={20} className={aspectRatio === '1:1' ? 'text-purple-400' : ''} />
+                                    <span className={`text-xs font-medium ${aspectRatio === '1:1' ? 'text-purple-200' : 'text-neutral-400'}`}>1:1</span>
                                 </button>
                                 <button
                                     onClick={() => handleChange('aspectRatio', '9:16')}
-                                    className={`p-3 rounded-lg border flex flex-col items-center gap-2 transition-all ${aspectRatio === '9:16' ? 'bg-purple-600/20 border-purple-500 text-purple-200' : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-600'}`}
+                                    className={`p-3.5 rounded-xl border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '9:16' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} text-neutral-400 hover:text-neutral-300 hover:shadow-md`}`}
                                 >
-                                    <Smartphone size={20} />
-                                    <span className="text-xs">9:16</span>
+                                    <Smartphone size={20} className={aspectRatio === '9:16' ? 'text-purple-400' : ''} />
+                                    <span className={`text-xs font-medium ${aspectRatio === '9:16' ? 'text-purple-200' : 'text-neutral-400'}`}>9:16</span>
                                 </button>
                             </div>
                         </div>
@@ -327,49 +335,49 @@ export const Controls: React.FC<ControlsProps> = ({
                         <div className="space-y-3">
                             <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('label.visibility', currentLang)}</label>
                             <div className="space-y-2">
-                                <label className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg border border-neutral-700 cursor-pointer hover:bg-neutral-750 transition-colors">
-                                    <span className="text-sm text-neutral-300">{t('label.showAuthor', currentLang)}</span>
+                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded-xl ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showAuthor', currentLang)}</span>
                                     <button
                                         type="button"
                                         onClick={() => handleChange('showAuthor', !showAuthor)}
-                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 ${
-                                            showAuthor ? 'bg-purple-600' : 'bg-neutral-600'
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                            showAuthor ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
                                         }`}
                                     >
                                         <span
-                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
                                                 showAuthor ? 'translate-x-6' : 'translate-x-1'
                                             }`}
                                         />
                                     </button>
                                 </label>
-                                <label className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg border border-neutral-700 cursor-pointer hover:bg-neutral-750 transition-colors">
-                                    <span className="text-sm text-neutral-300">{t('label.showIcon', currentLang)}</span>
+                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded-xl ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showIcon', currentLang)}</span>
                                     <button
                                         type="button"
                                         onClick={() => handleChange('showIcon', !showIcon)}
-                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 ${
-                                            showIcon ? 'bg-purple-600' : 'bg-neutral-600'
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                            showIcon ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
                                         }`}
                                     >
                                         <span
-                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
                                                 showIcon ? 'translate-x-6' : 'translate-x-1'
                                             }`}
                                         />
                                     </button>
                                 </label>
-                                <label className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg border border-neutral-700 cursor-pointer hover:bg-neutral-750 transition-colors">
-                                    <span className="text-sm text-neutral-300">{t('label.showDecoration', currentLang)}</span>
+                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded-xl ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showDecoration', currentLang)}</span>
                                     <button
                                         type="button"
                                         onClick={() => handleChange('showDecoration', !showDecoration)}
-                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 ${
-                                            showDecoration ? 'bg-purple-600' : 'bg-neutral-600'
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                            showDecoration ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
                                         }`}
                                     >
                                         <span
-                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
                                                 showDecoration ? 'translate-x-6' : 'translate-x-1'
                                             }`}
                                         />
@@ -382,54 +390,54 @@ export const Controls: React.FC<ControlsProps> = ({
             </div>
 
             {/* Zoom Controls */}
-            <div className="p-4 border-t border-neutral-800 bg-neutral-900">
+            <div className={`p-4 border-t ${appTheme.border} ${appTheme.button}`}>
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('zoom.preview', currentLang)}</label>
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('zoom.preview', currentLang)}</label>
                     <div className="flex items-center gap-2">
                         <button
                             onClick={onZoomOut}
                             disabled={zoomLevel <= 20}
-                            className="p-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg ${appTheme.hover} transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.05] active:scale-[0.95] shadow-sm hover:shadow-md`}
                             title={`${t('zoom.out', currentLang)} (-)`}
                         >
                             <ZoomOut size={16} />
                         </button>
-                        <div className="flex-1 text-center">
-                            <span className="text-sm font-medium text-neutral-300">{zoomLevel}%</span>
+                        <div className={`flex-1 text-center ${appTheme.button} rounded-lg px-3 py-2 ${appTheme.buttonBorder} shadow-sm`}>
+                            <span className={`text-sm font-bold ${appTheme.accent}`}>{zoomLevel}%</span>
                         </div>
                         <button
                             onClick={onZoomIn}
                             disabled={zoomLevel >= 150}
-                            className="p-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg ${appTheme.hover} transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.05] active:scale-[0.95] shadow-sm hover:shadow-md`}
                             title={`${t('zoom.in', currentLang)} (+)`}
                         >
                             <ZoomIn size={16} />
                         </button>
                         <button
                             onClick={onZoomReset}
-                            className="p-2 bg-neutral-800 border border-neutral-700 rounded-lg hover:bg-neutral-700 transition-colors"
+                            className={`p-2.5 ${appTheme.button} ${appTheme.buttonBorder} rounded-lg ${appTheme.hover} transition-all duration-200 transform hover:scale-[1.05] active:scale-[0.95] shadow-sm hover:shadow-md`}
                             title={`${t('zoom.reset', currentLang)} (0)`}
                         >
                             <RotateCcw size={16} />
                         </button>
                     </div>
-                    <div className="text-xs text-neutral-500 text-center">
+                    <div className={`text-xs ${appTheme.text} opacity-60 text-center`}>
                         快捷键: + / - / 0 | 滚轮: Ctrl + 滚轮
                     </div>
                 </div>
             </div>
 
             {/* Footer Actions */}
-            <div className="p-4 border-t border-neutral-800 bg-neutral-900">
+            <div className={`p-4 border-t ${appTheme.border} ${appTheme.button}`}>
                 <button
                     onClick={onDownload}
                     disabled={isDownloading}
-                    className="w-full bg-white text-black font-bold py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-white via-neutral-100 to-neutral-200 text-black font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:from-neutral-100 hover:via-neutral-200 hover:to-neutral-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl border border-neutral-300"
                 >
                     {isDownloading ? (
                         <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                     ) : (
-                        <Download size={18} />
+                        <Download size={18} className="text-neutral-700" />
                     )}
                     {isDownloading ? t('button.exporting', currentLang) : t('button.export', currentLang)}
                 </button>
