@@ -171,18 +171,18 @@ export const Controls: React.FC<ControlsProps> = ({
                 {showIcon && (
                     <div className="space-y-3">
                         <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
-                            装饰图标类型
+                            {t('label.iconType', currentLang)}
                         </label>
                         <div className="grid grid-cols-4 gap-2">
                             {[
-                                { type: 'brush', label: '画笔' },
-                                { type: 'cpu', label: 'CPU' },
-                                { type: 'code', label: '代码' },
-                                { type: 'database', label: '数据库' },
-                                { type: 'cloud', label: '云' },
-                                { type: 'layers', label: '图层' },
-                                { type: 'package', label: '包' },
-                                { type: 'settings', label: '设置' }
+                                { type: 'brush', label: t('icon.brush' as TranslationKey, currentLang) },
+                                { type: 'cpu', label: t('icon.cpu' as TranslationKey, currentLang) },
+                                { type: 'code', label: t('icon.code' as TranslationKey, currentLang) },
+                                { type: 'database', label: t('icon.database' as TranslationKey, currentLang) },
+                                { type: 'cloud', label: t('icon.cloud' as TranslationKey, currentLang) },
+                                { type: 'layers', label: t('icon.layers' as TranslationKey, currentLang) },
+                                { type: 'package', label: t('icon.package' as TranslationKey, currentLang) },
+                                { type: 'settings', label: t('icon.settings' as TranslationKey, currentLang) }
                             ].map((icon) => (
                                 <button
                                     key={icon.type}
@@ -214,6 +214,12 @@ export const Controls: React.FC<ControlsProps> = ({
     };
 
     const renderStyleTab = () => {
+
+        // 在函数内部解构所需的变量
+        const {
+            theme,
+        } = config;
+
         return (
             <div className="space-y-5">
                 {/* Background Type */}
@@ -334,6 +340,27 @@ export const Controls: React.FC<ControlsProps> = ({
                         ))}
                     </div>
                 </div>
+
+                {/* Theme Selection */}
+                <div className="space-y-3">
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                        {t('label.theme', currentLang)}
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                        {(['modern', 'classic', 'bold', 'minimal'] as const).map((themeOption) => (
+                            <button
+                                key={themeOption}
+                                onClick={() => handleChange('theme', themeOption)}
+                                className={`p-2 rounded border transition-all duration-200 ${theme === themeOption
+                                    ? `${appTheme.active} shadow-md`
+                                    : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
+                                }`}
+                            >
+                                <span className="text-xs">{t(`theme.${themeOption}` as TranslationKey, currentLang)}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
         );
     };
@@ -422,7 +449,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         </label>
                         {/* 3D Effect Toggle */}
                         <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
-                            <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">3D效果</span>
+                            <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.enable3DEffect', currentLang)}</span>
                             <button
                                 type="button"
                                 onClick={() => handleChange('enable3DEffect', !config.enable3DEffect)}
@@ -537,7 +564,7 @@ export const Controls: React.FC<ControlsProps> = ({
                         ) : (
                             <Download size={18} />
                         )}
-                        {isDownloading3D ? "正在导出3D..." : "导出3D封面"}
+                        {isDownloading3D ? t('button.exporting3D', currentLang) : t('button.export3D', currentLang)}
                     </button>
                 )}
                 
