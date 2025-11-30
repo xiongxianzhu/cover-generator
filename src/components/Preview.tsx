@@ -311,7 +311,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                             </div>
                         )}
                     </div>
-                    {showDecoration && (
+                    {showDecoration && themeStyles.decoration !== 'hidden' && (
                         <div className={themeStyles.decoration}>
                             <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
                             <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
