@@ -387,7 +387,9 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                 className="w-full h-full relative"
                 style={{
                     transformStyle: 'preserve-3d',
-                    transform: config.enable3DEffect ? `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)` : 'none',
+                    transform: config.enable3DEffect
+                        ? `scale(${zoomLevel / 100}) rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)`
+                        : 'none',
                     transition: config.enable3DEffect ? (isDragging ? 'none' : 'transform 0.1s ease') : 'none',
                     transformOrigin: 'center center'
                 }}
