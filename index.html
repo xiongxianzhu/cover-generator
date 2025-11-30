@@ -8,6 +8,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="page-title">CoverGen - High-End Cover Generator</title>
+    <style>
+      /* 自定义3D效果CSS类 */
+      .transform-style-3d {
+        transform-style: preserve-3d;
+      }
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      /* 玻璃效果 */
+      .glass-block {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 
+          0 35px 70px rgba(0, 0, 0, 0.5),
+          inset 0 0 40px rgba(255, 255, 255, 0.4),
+          inset 25px 0 40px rgba(255, 255, 255, 0.3),
+          inset -25px 0 40px rgba(0, 0, 0, 0.3);
+      }
+      .glass-block::before {
+        content: '';
+        position: absolute;
+        top: 35px;
+        left: 35px;
+        right: -35px;
+        bottom: -35px;
+        background: linear-gradient(45deg, 
+          rgba(255, 255, 255, 0.25) 0%, 
+          rgba(255, 255, 255, 0) 65%, 
+          rgba(0, 0, 0, 0.25) 100%);
+        z-index: -1;
+        filter: blur(30px);
+      }
+      .glass-block::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.1) 0%, 
+          rgba(255, 255, 255, 0) 40%, 
+          rgba(0, 0, 0, 0.1) 100%);
+        z-index: 1;
+      }
+      .cursor-grab {
+        cursor: grab;
+      }
+      .cursor-grabbing {
+        cursor: grabbing;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

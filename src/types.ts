@@ -18,6 +18,8 @@ export interface CoverConfig {
     gradientPreset: 'custom' | 'sunset' | 'ocean' | 'forest' | 'candy' | 'aurora' | 'flame';
     // 添加图标类型选项
     iconType: 'brush' | 'cpu' | 'code' | 'database' | 'cloud' | 'layers' | 'package' | 'settings';
+    // 添加3D效果选项
+    enable3DEffect: boolean;
 }
 
 export const defaultCoverConfig: CoverConfig = {
@@ -39,6 +41,7 @@ export const defaultCoverConfig: CoverConfig = {
     showDecoration: true,
     gradientPreset: 'aurora',
     iconType: 'code', // 默认图标类型
+    enable3DEffect: false, // 默认不启用3D效果
 };
 
 // 渐变预设定义

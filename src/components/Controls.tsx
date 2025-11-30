@@ -456,8 +456,26 @@ export const Controls: React.FC<ControlsProps> = ({
                                         />
                                     </button>
                                 </label>
+                                {/* 3D Effect Toggle */}
+                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">3D效果</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleChange('enable3DEffect', !config.enable3DEffect)}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                            config.enable3DEffect ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
+                                        }`}
+                                    >
+                                        <span
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
+                                                config.enable3DEffect ? 'translate-x-6' : 'translate-x-1'
+                                            }`}
+                                        />
+                                    </button>
+                                </label>
                             </div>
                         </div>
+
                     </div>
                 )}
             </div>

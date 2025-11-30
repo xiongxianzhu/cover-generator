@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, WheelEvent } from 'react';
+import React, { forwardRef, useEffect, WheelEvent, useState, useRef } from 'react';
 import type { CoverConfig } from '../types';
 import { gradientPresets, geometricPatterns } from '../types';
 import { Terminal, Cpu, Code, Database, Cloud, Layers, Package, Settings, Brush } from 'lucide-react';
@@ -10,6 +10,12 @@ interface PreviewProps {
 }
 
 export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomLevel = 60, onWheel }, ref) => {
+    // 3D旋转状态
+    const [rotation, setRotation] = useState({ x: -20, y: -30 }); // 增加初始旋转角度以增强厚度感
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+    const previewRef = useRef<HTMLDivElement>(null);
+
     const {
         title,
         subtitle,
@@ -29,6 +35,47 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
         showDecoration,
         gradientPreset,
     } = config;
+
+    // 拖拽旋转功能
+    useEffect(() => {
+        const handleMouseDown = (e: MouseEvent) => {
+            if (config.enable3DEffect) {
+                setIsDragging(true);
+                setDragStart({ x: e.clientX, y: e.clientY });
+            }
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (isDragging && config.enable3DEffect) {
+                const deltaX = e.clientX - dragStart.x;
+                const deltaY = e.clientY - dragStart.y;
+                
+                setRotation(prev => ({
+                    x: prev.x + deltaY * 0.5,
+                    y: prev.y + deltaX * 0.5
+                }));
+                
+                setDragStart({ x: e.clientX, y: e.clientY });
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+        };
+
+        const previewElement = previewRef.current;
+        if (previewElement) {
+            previewElement.addEventListener('mousedown', handleMouseDown);
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+            
+            return () => {
+                previewElement.removeEventListener('mousedown', handleMouseDown);
+                window.removeEventListener('mousemove', handleMouseMove);
+                window.removeEventListener('mouseup', handleMouseUp);
+            };
+        }
+    }, [isDragging, dragStart, config.enable3DEffect]);
 
     // 滚轮事件监听
     useEffect(() => {
@@ -255,7 +302,6 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
         
         return (
             <div className={`h-full flex flex-col justify-between relative z-10 ${alignClass} ${themeStyles.container}`}>
-
                 {/* Header / Icon */}
                 <div className="w-full flex justify-between items-start">
                     <div>
@@ -320,12 +366,15 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
     return (
         <div
-            className="overflow-hidden shadow-2xl rounded-sm transition-all duration-300 ease-in-out origin-center max-w-full"
+            ref={previewRef}
+            className={`overflow-hidden transition-all duration-300 ease-in-out origin-center max-w-full ${config.enable3DEffect ? 'transform-style-3d perspective-1000 glass-block cursor-grab active:cursor-grabbing' : 'shadow-2xl'}`}
             style={
                 {
                     width: dimensions.width,
                     height: dimensions.height,
-                    transform: `scale(${zoomLevel / 100})`
+                    transform: config.enable3DEffect ? `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)` : `scale(${zoomLevel / 100})`,
+                    transition: config.enable3DEffect ? (isDragging ? 'none' : 'transform 0.1s ease') : 'transform 0.3s ease',
+                    cursor: config.enable3DEffect ? 'grab' : 'default'
                 }
             }
         >

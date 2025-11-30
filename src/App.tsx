@@ -182,6 +182,8 @@ function App() {
     const showAuthor = Math.random() > 0.3; // 70% chance to show author
     const showIcon = Math.random() > 0.3; // 70% chance to show icon
     const showDecoration = Math.random() > 0.3; // 70% chance to show decoration
+    // 10% chance to enable 3D effect
+    const enable3DEffect = Math.random() > 0.9;
 
     setConfig(prev => ({
       ...prev,
@@ -195,6 +197,7 @@ function App() {
       showAuthor,
       showIcon,
       showDecoration,
+      enable3DEffect,
     }));
   };
 
