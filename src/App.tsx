@@ -17,8 +17,6 @@ function App() {
   const [zoomLevel, setZoomLevel] = useState(60); // 默认60%缩放，适配移动端
   const previewRef = useRef<HTMLDivElement>(null);
 
-  const [rotation, setRotation] = useState({ x: -20, y: -30 }); // 3D旋转状态提升到App组件
-
   // 动态设置页面标题
   useEffect(() => {
     // 更新 document.title 以确保浏览器标签页标题正确
@@ -108,74 +106,66 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const [exportPerspective, setExportPerspective] = useState(1000);
-
   const handleDownload = useCallback(async () => {
     if (previewRef.current === null) {
       return;
     }
 
     setIsDownloading(true);
-
-    // 保存当前缩放比例
-    const previousZoomLevel = zoomLevel;
-
-    // 计算导出时的透视值，以保持视觉一致性
-    // 原理：保持 距离/物体大小 的比例恒定
-    // P_new = P_old * (Size_new / Size_old) = 1000 * (100 / zoomLevel)
-    const newPerspective = 1000 * (100 / zoomLevel);
-    setExportPerspective(newPerspective);
+    // Add a small delay to show the loading state (UX)
+    await new Promise(resolve => setTimeout(resolve, 800));
 
     try {
-      // 1. 将缩放调整为100%，以获取原始尺寸
-      setZoomLevel(100);
-
-      // 2. 等待渲染和过渡动画完成
-      await new Promise(resolve => setTimeout(resolve, 500));
-
+      // 简化的导出逻辑 - 高质量PNG导出
       const element = previewRef.current;
-      const width = element.offsetWidth;
-      const height = element.offsetHeight;
 
-      // 3. 导出图片
-      // 增加画布大小以防止3D旋转导致的截断，并居中显示
-      const scaleFactor = 1.5;
-      const newWidth = width * scaleFactor;
-      const newHeight = height * scaleFactor;
-      const offsetX = (newWidth - width) / 2;
-      const offsetY = (newHeight - height) / 2;
+      // 临时移除缩放transform，确保导出原始尺寸
+      const originalTransform = element.style.transform;
+      element.style.transform = 'scale(1)';
+      
+      // 保持3D效果导出，但设置合适的背景
+      const originalBackgroundColor = element.style.backgroundColor;
+      
+      // 如果启用了3D效果，设置一个合适的背景色以突出3D效果
+      if (config.enable3DEffect) {
+        // 临时设置背景色以突出3D效果
+        element.style.backgroundColor = config.backgroundColor;
+      }
 
-      const dataUrl = await toPng(element, {
-        cacheBust: true,
-        pixelRatio: 3, // 更高分辨率
-        quality: 1.0, // 最高质量
-        backgroundColor: undefined, // 保持背景透明
-        width: newWidth,
-        height: newHeight,
-        style: {
-          transform: `translate(${offsetX}px, ${offsetY}px)`,
-          transformOrigin: 'center center',
-          // @ts-ignore
-          WebkitFontSmoothing: 'antialiased',
-          MozOsxFontSmoothing: 'grayscale',
+      try {
+        const dataUrl = await toPng(element, {
+          cacheBust: true,
+          pixelRatio: 2, // 高分辨率
+          quality: 0.95, // 高质量
+          backgroundColor: config.enable3DEffect ? undefined : config.backgroundColor, // 3D效果时保持默认背景处理
+          style: {
+            transform: 'scale(1)',
+            transformOrigin: 'top left'
+          }
+        });
+
+        // 创建下载链接
+        const link = document.createElement('a');
+        link.download = `${config.title.replace(/\s+/g, '-').toLowerCase()}-cover.png`;
+        link.href = dataUrl;
+        link.click();
+
+        return dataUrl;
+
+      } finally {
+        // 恢复原始transform和背景色
+        element.style.transform = originalTransform;
+        if (config.enable3DEffect) {
+          element.style.backgroundColor = originalBackgroundColor || '';
         }
-      });
-
-      // 4. 创建下载链接
-      const link = document.createElement('a');
-      link.download = `${config.title.replace(/\s+/g, '-').toLowerCase()}-cover.png`;
-      link.href = dataUrl;
-      link.click();
-
+      }
     } catch (error) {
       console.error('Failed to download image', error);
+      throw error;
     } finally {
-      // 5. 恢复之前的状态
-      setZoomLevel(previousZoomLevel);
-      setExportPerspective(1000);
       setIsDownloading(false);
     }
-  }, [config.title, zoomLevel]);
+  }, [config]);
 
   const handleRandomize = () => {
     const themes: CoverConfig['theme'][] = ['modern', 'classic', 'bold', 'minimal'];
@@ -199,7 +189,7 @@ function App() {
     const randomGradientPreset = gradientPresets[Math.floor(Math.random() * gradientPresets.length)];
     const randomIconType = iconTypes[Math.floor(Math.random() * iconTypes.length)]; // 添加随机图标类型选择
     const isGradient = Math.random() > 0.7; // 30% chance of gradient
-
+    
     // 随机设置显示选项
     const showAuthor = Math.random() > 0.3; // 70% chance to show author
     const showIcon = Math.random() > 0.3; // 70% chance to show icon
@@ -221,9 +211,6 @@ function App() {
       showDecoration,
       enable3DEffect,
     }));
-
-    // 重置旋转角度
-    setRotation({ x: -20, y: -30 });
   };
 
   const handleChange = <K extends keyof CoverConfig>(key: K, value: CoverConfig[K]) => {
@@ -252,15 +239,7 @@ function App() {
       currentTheme={currentTheme}
       onThemeChange={setCurrentTheme}
     >
-      <Preview
-        ref={previewRef}
-        config={config}
-        zoomLevel={zoomLevel}
-        onWheel={handleWheel}
-        rotation={rotation}
-        onRotationChange={setRotation}
-        perspective={isDownloading ? exportPerspective : 1000}
-      />
+      <Preview ref={previewRef} config={config} zoomLevel={zoomLevel} onWheel={handleWheel} />
     </Layout>
   );
 }

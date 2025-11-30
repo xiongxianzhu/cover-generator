@@ -7,16 +7,17 @@ interface PreviewProps {
     config: CoverConfig;
     zoomLevel?: number;
     onWheel?: (event: React.WheelEvent<HTMLElement>) => void;
-    rotation: { x: number; y: number };
-    onRotationChange: (rotation: { x: number; y: number }) => void;
-    perspective?: number;
 }
 
-export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomLevel = 60, onWheel, rotation, onRotationChange, perspective = 1000 }, ref) => {
-    // 3D旋转状态现在由父组件管理
+export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomLevel = 60, onWheel }, ref) => {
+    // 3D旋转状态
+    const [rotation, setRotation] = useState({ x: -20, y: -30 });
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const previewRef = useRef<HTMLDivElement>(null);
+    
+    // 厚度值(像素) - 用于创建3D效果
+    const depth = 20;
 
     const {
         title,
@@ -51,11 +52,11 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             if (isDragging && config.enable3DEffect) {
                 const deltaX = e.clientX - dragStart.x;
                 const deltaY = e.clientY - dragStart.y;
-
-                onRotationChange({
-                    x: rotation.x + deltaY * 0.5,
-                    y: rotation.y + deltaX * 0.5
-                });
+                
+                setRotation(prev => ({
+                    x: prev.x + deltaY * 0.5,
+                    y: prev.y + deltaX * 0.5
+                }));
 
                 setDragStart({ x: e.clientX, y: e.clientY });
             }
@@ -70,14 +71,14 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             previewElement.addEventListener('mousedown', handleMouseDown);
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
-
+            
             return () => {
                 previewElement.removeEventListener('mousedown', handleMouseDown);
                 window.removeEventListener('mousemove', handleMouseMove);
                 window.removeEventListener('mouseup', handleMouseUp);
             };
         }
-    }, [isDragging, dragStart, config.enable3DEffect, onRotationChange, rotation]);
+    }, [isDragging, dragStart, config.enable3DEffect, rotation]);
 
     // 滚轮事件监听
     useEffect(() => {
@@ -290,12 +291,11 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
         }
     };
 
-    const titleClass = getTitleSize();
-    const themeStyles = getThemeStyles(titleClass);
-
     // Theme Content
     const renderContent = () => {
         const alignClass = getAlignmentClass();
+        const titleClass = getTitleSize();
+        const themeStyles = getThemeStyles(titleClass);
         // 获取当前选中的图标组件，如果没有选中则随机选择一个
         const getRandomIcon = () => {
             const iconKeys = Object.keys(iconMap);
@@ -303,7 +303,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             return iconMap[randomKey as keyof typeof iconMap];
         };
         const IconComponent = config.iconType && iconMap[config.iconType] ? iconMap[config.iconType] : getRandomIcon();
-
+        
         return (
             <div className={`h-full flex flex-col justify-between relative z-10 ${alignClass} ${themeStyles.container}`}>
                 {/* Header / Icon */}
@@ -315,7 +315,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                             </div>
                         )}
                     </div>
-                    {showDecoration && themeStyles.decoration !== 'hidden' && (
+                    {showDecoration && (
                         <div className={themeStyles.decoration}>
                             <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
                             <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
@@ -363,25 +363,13 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                         )}
                     </div>
                 </div>
-
             </div>
         );
     };
 
-    // 厚度值(像素) - 减小厚度以解决边缘视觉错位问题，使其更像卡片
-    const depth = 20;
-
     return (
         <div
-            ref={(node) => {
-                // 合并refs: 既更新内部previewRef,也更新外部传入的ref
-                previewRef.current = node;
-                if (typeof ref === 'function') {
-                    ref(node);
-                } else if (ref) {
-                    (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-                }
-            }}
+            ref={previewRef}
             className={`transition-all duration-300 ease-in-out origin-center max-w-full ${config.enable3DEffect ? 'cursor-grab active:cursor-grabbing' : 'shadow-2xl'}`}
             style={
                 {
@@ -391,7 +379,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     transition: config.enable3DEffect ? 'none' : 'transform 0.3s ease',
                     cursor: config.enable3DEffect ? 'grab' : 'default',
                     transformStyle: 'preserve-3d',
-                    perspective: config.enable3DEffect ? `${perspective}px` : 'none'
+                    perspective: config.enable3DEffect ? '1000px' : 'none'
                 }
             }
         >
@@ -422,7 +410,8 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
                 {/* 前面 - 封面内容层(透明,无背景) - 移到背景层之后以确保显示在最上层，且Z轴与表面齐平 */}
                 <div
-                    className={`w-full h-full absolute inset-0 ${themeStyles.container} flex flex-col justify-between overflow-hidden backface-hidden`}
+                    ref={ref as React.RefObject<HTMLDivElement>}
+                    className={`w-full h-full absolute inset-0 flex flex-col justify-between overflow-hidden backface-hidden`}
                     style={{
                         transform: `translateZ(${depth / 2}px)`,
                         backfaceVisibility: 'hidden',
@@ -510,12 +499,12 @@ Preview.displayName = 'Preview';
 
 // 在文件中添加图标映射
 const iconMap = {
-    brush: Brush,
-    cpu: Cpu,
-    code: Code,
-    database: Database,
-    cloud: Cloud,
-    layers: Layers,
-    package: Package,
-    settings: Settings
+  brush: Brush,
+  cpu: Cpu,
+  code: Code,
+  database: Database,
+  cloud: Cloud,
+  layers: Layers,
+  package: Package,
+  settings: Settings
 };

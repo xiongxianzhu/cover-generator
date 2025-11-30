@@ -61,6 +61,31 @@
       .cursor-grabbing {
         cursor: grabbing;
       }
+      
+      /* 3D玻璃面样式 */
+      .glass-face-front {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+      }
+      
+      .glass-face-back {
+        background: rgba(0, 0, 0, 0.1);
+      }
+      
+      .glass-face-top,
+      .glass-face-bottom,
+      .glass-face-left,
+      .glass-face-right {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+      }
+      
+      .backface-hidden {
+        backface-visibility: hidden;
+      }
     </style>
   </head>
   <body>
