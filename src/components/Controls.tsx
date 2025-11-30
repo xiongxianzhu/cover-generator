@@ -448,13 +448,13 @@ export const Controls: React.FC<ControlsProps> = ({
             {/* Header */}
             <div className={`p-4 border-b ${appTheme.border}`}>
                 <div className="flex items-center justify-between">
-                    <h2 className={`text-lg font-bold ${appTheme.text}`}>{t('controls.title', currentLang)}</h2>
                     <button
                         onClick={onRandomize}
-                        className={`p-2 ${appTheme.button} rounded-full ${appTheme.buttonBorder} transition-all duration-200 hover:shadow-md`}
-                        title={t('button.randomize', currentLang)}
+                        className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:from-purple-500 hover:via-blue-500 hover:to-cyan-500 text-white font-semibold py-3 px-4 rounded flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-purple-900/20 hover:shadow-purple-900/30 group transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm"
+                        title={t('magic.button', currentLang)}
                     >
                         <Wand2 size={18} />
+                        <span>{t('magic.button', currentLang)}</span>
                     </button>
                 </div>
             </div>
@@ -469,7 +469,7 @@ export const Controls: React.FC<ControlsProps> = ({
                             className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                                 activeTab === tab
                                     ? `${appTheme.active} ${appTheme.text}`
-                                    : `bg-gray-700 ${appTheme.text} hover:${appTheme.text}/80`
+                                    : `${appTheme.button} ${appTheme.text} hover:${appTheme.text}/80`
                             }`}
                         >
                             {t(`tab.${tab}`, currentLang)}
@@ -530,7 +530,7 @@ export const Controls: React.FC<ControlsProps> = ({
                     <button
                         onClick={onDownload3D}
                         disabled={isDownloading3D}
-                        className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-bold py-3 px-4 rounded mb-3 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                        className={`w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-500 hover:to-indigo-600 text-white font-bold py-3 px-4 rounded mb-3 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base`}
                     >
                         {isDownloading3D ? (
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

@@ -60,7 +60,8 @@ export function waitForRender(ms: number = 800): Promise<void> {
 export async function export3DCover(
   canvas2d: HTMLCanvasElement, 
   background: string = "#ffffff",
-  filename?: string
+  filename?: string,
+  rotation?: { x: number; y: number } // 添加旋转参数
 ): Promise<void> {
   // 创建纹理
   const texture = new THREE.CanvasTexture(canvas2d);
@@ -69,10 +70,10 @@ export async function export3DCover(
   const container = createTempContainer();
   
   try {
-    // 挂载 3D Canvas
+    // 挂载 3D Canvas，传递旋转参数
     const root = createRoot(container);
     // 使用 createElement 来避免 JSX 语法错误
-    const element = ThreeDCanvas({ coverTexture: texture, background });
+    const element = ThreeDCanvas({ coverTexture: texture, background, rotation });
     root.render(element);
     
     // 等待渲染完成

@@ -6,9 +6,10 @@ import CoverPlane from "./CoverPlane";
 interface Props {
   coverTexture: THREE.Texture;
   background?: string;
+  rotation?: { x: number; y: number }; // 添加旋转参数
 }
 
-export default function ThreeDCanvas({ coverTexture, background = "#ffffff" }: Props) {
+export default function ThreeDCanvas({ coverTexture, background = "#ffffff", rotation }: Props) {
   return (
     <Canvas
       gl={{
@@ -30,8 +31,8 @@ export default function ThreeDCanvas({ coverTexture, background = "#ffffff" }: P
       {/* 补充光 */}
       <pointLight position={[-5, -5, 5]} intensity={0.3} />
 
-      {/* 封面贴图平面 */}
-      <CoverPlane coverTexture={coverTexture} />
+      {/* 封面贴图平面，传递旋转参数 */}
+      <CoverPlane coverTexture={coverTexture} rotation={rotation} />
 
       {/* 轨道控制器 */}
       <OrbitControls

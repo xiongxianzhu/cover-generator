@@ -60,7 +60,7 @@ export const Layout: React.FC<LayoutProps> = ({
                     <img
                         src="/logo.png"
                         alt={t('app.title', currentLang)}
-                        className="w-8 h-8 rounded object-cover transition-transform duration-200 group-hover:scale-105"
+                        className="w-14 h-14 rounded object-cover transition-transform duration-200 group-hover:scale-105"
                         onError={(e) => {
                             e.currentTarget.style.display = 'none';
                         }}

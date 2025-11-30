@@ -9,12 +9,23 @@ interface PreviewProps {
     onWheel?: (event: React.WheelEvent<HTMLElement>) => void;
 }
 
-export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomLevel = 60, onWheel }, ref) => {
+export interface PreviewRef {
+    getElement: () => HTMLDivElement | null;
+    getRotation: () => { x: number; y: number };
+}
+
+export const Preview = forwardRef<PreviewRef, PreviewProps>(({ config, zoomLevel = 60, onWheel }, ref) => {
     // 3D旋转状态
     const [rotation, setRotation] = useState({ x: -20, y: -30 });
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const previewRef = useRef<HTMLDivElement>(null);
+    
+    // 暴露元素和旋转状态给外部组件
+    React.useImperativeHandle(ref, () => ({
+        getElement: () => previewRef.current,
+        getRotation: () => rotation
+    }));
     
     // 厚度值(像素) - 用于创建3D效果
     const depth = 20;
@@ -82,9 +93,9 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
     // 滚轮事件监听
     useEffect(() => {
-        const previewElement = ref as React.RefObject<HTMLDivElement>;
+        const previewElement = previewRef.current;
         // Handle the case where ref might be a function or null
-        const containerElement = previewElement?.current || previewRef.current;
+        const containerElement = previewElement;
 
         if (containerElement && onWheel) {
             const handleWheel = (event: Event) => {
@@ -104,7 +115,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                 containerElement.removeEventListener('wheel', handleWheel);
             };
         }
-    }, [onWheel, ref]);
+    }, [onWheel]);
 
     // Aspect Ratio Dimensions
     const getDimensions = () => {
@@ -410,7 +421,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
 
                 {/* 前面 - 封面内容层(透明,无背景) - 移到背景层之后以确保显示在最上层，且Z轴与表面齐平 */}
                 <div
-                    ref={ref as React.RefObject<HTMLDivElement>}
+                    ref={previewRef as React.RefObject<HTMLDivElement>}
                     className={`w-full h-full absolute inset-0 flex flex-col justify-between overflow-hidden backface-hidden`}
                     style={{
                         transform: `translateZ(${depth / 2}px)`,

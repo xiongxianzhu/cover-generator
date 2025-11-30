@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { toPng } from 'html-to-image';
 import { Layout } from './components/Layout';
-import { Preview } from './components/Preview';
+import { Preview, PreviewRef } from './components/Preview';
 import { Controls } from './components/Controls';
 import type { CoverConfig } from './types';
 import { defaultCoverConfig } from './types';
@@ -18,7 +18,7 @@ function App() {
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
   const [currentTheme, setCurrentTheme] = useState<AppTheme>('cyberpunk');
   const [zoomLevel, setZoomLevel] = useState(60); // 默认60%缩放，适配移动端
-  const previewRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<PreviewRef>(null);
 
   // 动态设置页面标题
   useEffect(() => {
@@ -110,7 +110,12 @@ function App() {
   }, []);
 
   const handleDownload = useCallback(async () => {
-    if (previewRef.current === null) {
+    if (!previewRef.current) {
+      return;
+    }
+    
+    const element = previewRef.current.getElement();
+    if (element === null) {
       return;
     }
 
@@ -120,27 +125,15 @@ function App() {
 
     try {
       // 简化的导出逻辑 - 高质量PNG导出
-      const element = previewRef.current;
-
       // 临时移除缩放transform，确保导出原始尺寸
       const originalTransform = element.style.transform;
       element.style.transform = 'scale(1)';
       
-      // 保持3D效果导出，但设置合适的背景
-      const originalBackgroundColor = element.style.backgroundColor;
-      
-      // 如果启用了3D效果，设置一个合适的背景色以突出3D效果
-      if (config.enable3DEffect) {
-        // 临时设置背景色以突出3D效果
-        element.style.backgroundColor = config.backgroundColor;
-      }
-
       try {
         const dataUrl = await toPng(element, {
           cacheBust: true,
           pixelRatio: 2, // 高分辨率
           quality: 0.95, // 高质量
-          backgroundColor: config.enable3DEffect ? undefined : config.backgroundColor, // 3D效果时保持默认背景处理
           style: {
             transform: 'scale(1)',
             transformOrigin: 'top left'
@@ -156,11 +149,8 @@ function App() {
         return dataUrl;
 
       } finally {
-        // 恢复原始transform和背景色
+        // 恢复原始transform
         element.style.transform = originalTransform;
-        if (config.enable3DEffect) {
-          element.style.backgroundColor = originalBackgroundColor || '';
-        }
       }
     } catch (error) {
       console.error('Failed to download image', error);
@@ -172,13 +162,29 @@ function App() {
 
   // 3D导出功能
   const handleDownload3D = useCallback(async () => {
-    if (previewRef.current === null) {
+    if (!previewRef.current) {
+      return;
+    }
+    
+    const element = previewRef.current.getElement();
+    if (element === null) {
       return;
     }
 
     setIsDownloading3D(true);
     
     try {
+      // 获取预览时的旋转角度
+      let rotation = { x: -0.3, y: 0.5 }; // 默认角度
+      if (previewRef.current) {
+        rotation = previewRef.current.getRotation();
+        // 将角度从度数转换为弧度
+        rotation = {
+          x: rotation.x * Math.PI / 180,
+          y: rotation.y * Math.PI / 180
+        };
+      }
+      
       // 创建一个临时canvas来获取2D封面
       const tempCanvas = document.createElement('canvas');
       const ctx = tempCanvas.getContext('2d');
@@ -192,7 +198,7 @@ function App() {
       tempCanvas.height = 675;
       
       // 使用html-to-image获取预览内容
-      const dataUrl = await toPng(previewRef.current, {
+      const dataUrl = await toPng(element, {
         cacheBust: true,
         pixelRatio: 2,
         quality: 0.95,
@@ -212,11 +218,12 @@ function App() {
       
       ctx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
       
-      // 调用3D导出函数
+      // 调用3D导出函数，传递旋转角度
       await export3DCover(
         tempCanvas, 
         config.backgroundColor, 
-        `${config.title.replace(/\s+/g, '-').toLowerCase()}-cover-3d.png`
+        `${config.title.replace(/\s+/g, '-').toLowerCase()}-cover-3d.png`,
+        rotation
       );
     } catch (error) {
       console.error('3D导出失败:', error);
@@ -300,7 +307,12 @@ function App() {
       currentTheme={currentTheme}
       onThemeChange={setCurrentTheme}
     >
-      <Preview ref={previewRef} config={config} zoomLevel={zoomLevel} onWheel={handleWheel} />
+      <Preview 
+        ref={previewRef} 
+        config={config} 
+        zoomLevel={zoomLevel} 
+        onWheel={handleWheel} 
+      />
     </Layout>
   );
 }
