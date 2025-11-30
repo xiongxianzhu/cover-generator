@@ -49,12 +49,12 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             if (isDragging && config.enable3DEffect) {
                 const deltaX = e.clientX - dragStart.x;
                 const deltaY = e.clientY - dragStart.y;
-                
+
                 setRotation(prev => ({
                     x: prev.x + deltaY * 0.5,
                     y: prev.y + deltaX * 0.5
                 }));
-                
+
                 setDragStart({ x: e.clientX, y: e.clientY });
             }
         };
@@ -68,7 +68,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             previewElement.addEventListener('mousedown', handleMouseDown);
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
-            
+
             return () => {
                 previewElement.removeEventListener('mousedown', handleMouseDown);
                 window.removeEventListener('mousemove', handleMouseMove);
@@ -90,7 +90,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     nativeEvent: wheelEvent as unknown as WheelEvent,
                     isDefaultPrevented: () => wheelEvent.defaultPrevented,
                     isPropagationStopped: () => false,
-                    persist: () => {},
+                    persist: () => { },
                 } as unknown as React.WheelEvent<HTMLElement>;
                 onWheel(reactWheelEvent);
             };
@@ -299,7 +299,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
             return iconMap[randomKey as keyof typeof iconMap];
         };
         const IconComponent = config.iconType && iconMap[config.iconType] ? iconMap[config.iconType] : getRandomIcon();
-        
+
         return (
             <div className={`h-full flex flex-col justify-between relative z-10 ${alignClass} ${themeStyles.container}`}>
                 {/* Header / Icon */}
@@ -364,27 +364,128 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
         );
     };
 
+    // 厚度值(像素)
+    const depth = 40;
+
     return (
         <div
             ref={previewRef}
-            className={`overflow-hidden transition-all duration-300 ease-in-out origin-center max-w-full ${config.enable3DEffect ? 'transform-style-3d perspective-1000 glass-block cursor-grab active:cursor-grabbing' : 'shadow-2xl'}`}
+            className={`transition-all duration-300 ease-in-out origin-center max-w-full ${config.enable3DEffect ? 'perspective-1000 cursor-grab active:cursor-grabbing' : 'shadow-2xl'}`}
             style={
                 {
                     width: dimensions.width,
                     height: dimensions.height,
-                    transform: config.enable3DEffect ? `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)` : `scale(${zoomLevel / 100})`,
-                    transition: config.enable3DEffect ? (isDragging ? 'none' : 'transform 0.1s ease') : 'transform 0.3s ease',
-                    cursor: config.enable3DEffect ? 'grab' : 'default'
+                    transform: config.enable3DEffect ? 'none' : `scale(${zoomLevel / 100})`,
+                    transition: config.enable3DEffect ? 'none' : 'transform 0.3s ease',
+                    cursor: config.enable3DEffect ? 'grab' : 'default',
+                    transformStyle: 'preserve-3d'
                 }
             }
         >
+            {/* 3D容器 */}
             <div
-                ref={ref}
-                className="w-full h-full relative overflow-hidden"
-                style={getBackgroundStyle()}
+                className="w-full h-full relative"
+                style={{
+                    transformStyle: 'preserve-3d',
+                    transform: config.enable3DEffect ? `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)` : 'none',
+                    transition: config.enable3DEffect ? (isDragging ? 'none' : 'transform 0.1s ease') : 'none',
+                }}
             >
-                {getPatternOverlay()}
-                {renderContent()}
+                {/* 前面 - 封面内容层(透明,无背景) */}
+                <div
+                    ref={ref}
+                    className="w-full h-full absolute overflow-hidden"
+                    style={{
+                        transform: `translateZ(${depth / 2 + 2}px)`,
+                        backfaceVisibility: 'hidden',
+                        color: textColor,
+                        fontFamily
+                    }}
+                >
+                    {renderContent()}
+                </div>
+
+                {/* 果冻层 - 前面(带背景色) */}
+                <div
+                    className="w-full h-full absolute overflow-hidden glass-face-front"
+                    style={{
+                        ...getBackgroundStyle(),
+                        transform: `translateZ(${depth / 2}px)`,
+                        backfaceVisibility: 'hidden',
+                        opacity: 0.85
+                    }}
+                >
+                    {getPatternOverlay()}
+                </div>
+
+                {/* 果冻层 - 后面 */}
+                <div
+                    className="w-full h-full absolute overflow-hidden glass-face-back"
+                    style={{
+                        ...getBackgroundStyle(),
+                        transform: `translateZ(-${depth / 2}px) rotateY(180deg)`,
+                        backfaceVisibility: 'hidden',
+                        opacity: 0.5
+                    }}
+                >
+                    {getPatternOverlay()}
+                </div>
+
+                {/* 果冻层 - 顶面 */}
+                <div
+                    className="w-full absolute glass-face-top"
+                    style={{
+                        height: `${depth}px`,
+                        background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
+                        transform: `translateY(-${depth / 2}px) rotateX(90deg)`,
+                        transformOrigin: 'center center',
+                        backfaceVisibility: 'hidden',
+                        opacity: 0.7,
+                        top: 0
+                    }}
+                />
+
+                {/* 果冻层 - 底面 */}
+                <div
+                    className="w-full absolute glass-face-bottom"
+                    style={{
+                        height: `${depth}px`,
+                        background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
+                        transform: `translateY(${depth / 2}px) rotateX(-90deg)`,
+                        transformOrigin: 'center center',
+                        bottom: 0,
+                        backfaceVisibility: 'hidden',
+                        opacity: 0.7
+                    }}
+                />
+
+                {/* 果冻层 - 左侧面 */}
+                <div
+                    className="h-full absolute glass-face-left"
+                    style={{
+                        width: `${depth}px`,
+                        background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
+                        transform: `translateX(-${depth / 2}px) rotateY(-90deg)`,
+                        transformOrigin: 'center center',
+                        left: 0,
+                        backfaceVisibility: 'hidden',
+                        opacity: 0.6
+                    }}
+                />
+
+                {/* 果冻层 - 右侧面 */}
+                <div
+                    className="h-full absolute glass-face-right"
+                    style={{
+                        width: `${depth}px`,
+                        background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
+                        transform: `translateX(${depth / 2}px) rotateY(90deg)`,
+                        transformOrigin: 'center center',
+                        right: 0,
+                        backfaceVisibility: 'hidden',
+                        opacity: 0.6
+                    }}
+                />
             </div>
         </div>
     );
@@ -394,12 +495,12 @@ Preview.displayName = 'Preview';
 
 // 在文件中添加图标映射
 const iconMap = {
-  brush: Brush,
-  cpu: Cpu,
-  code: Code,
-  database: Database,
-  cloud: Cloud,
-  layers: Layers,
-  package: Package,
-  settings: Settings
+    brush: Brush,
+    cpu: Cpu,
+    code: Code,
+    database: Database,
+    cloud: Cloud,
+    layers: Layers,
+    package: Package,
+    settings: Settings
 };
