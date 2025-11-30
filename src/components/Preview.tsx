@@ -440,11 +440,11 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     style={{
                         height: `${depth}px`,
                         background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
-                        transform: `translateY(-${depth / 2}px) rotateX(90deg)`,
+                        transform: `rotateX(90deg) translateZ(${depth / 2}px)`,
                         transformOrigin: 'center center',
+                        top: 0,
                         backfaceVisibility: 'hidden',
-                        opacity: 0.7,
-                        top: 0
+                        opacity: 0.7
                     }}
                 />
 
@@ -454,7 +454,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     style={{
                         height: `${depth}px`,
                         background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
-                        transform: `translateY(${depth / 2}px) rotateX(-90deg)`,
+                        transform: `rotateX(-90deg) translateZ(${depth / 2}px)`,
                         transformOrigin: 'center center',
                         bottom: 0,
                         backfaceVisibility: 'hidden',
@@ -468,7 +468,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     style={{
                         width: `${depth}px`,
                         background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
-                        transform: `translateX(-${depth / 2}px) rotateY(-90deg)`,
+                        transform: `rotateY(-90deg) translateZ(${depth / 2}px)`,
                         transformOrigin: 'center center',
                         left: 0,
                         backfaceVisibility: 'hidden',
@@ -482,7 +482,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     style={{
                         width: `${depth}px`,
                         background: getBackgroundStyle().background || getBackgroundStyle().backgroundColor,
-                        transform: `translateX(${depth / 2}px) rotateY(90deg)`,
+                        transform: `rotateY(90deg) translateZ(${depth / 2}px)`,
                         transformOrigin: 'center center',
                         right: 0,
                         backfaceVisibility: 'hidden',
