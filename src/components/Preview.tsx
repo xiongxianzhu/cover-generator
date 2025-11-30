@@ -365,7 +365,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
     };
 
     // 厚度值(像素)
-    const depth = 40;
+    const depth = 20;
 
     return (
         <div
@@ -389,6 +389,7 @@ export const Preview = forwardRef<HTMLDivElement, PreviewProps>(({ config, zoomL
                     transformStyle: 'preserve-3d',
                     transform: config.enable3DEffect ? `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)` : 'none',
                     transition: config.enable3DEffect ? (isDragging ? 'none' : 'transform 0.1s ease') : 'none',
+                    transformOrigin: 'center center'
                 }}
             >
                 {/* 前面 - 封面内容层(透明,无背景) */}
