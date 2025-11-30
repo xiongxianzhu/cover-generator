@@ -7,6 +7,7 @@ export const translations = {
         'tab.content': 'Content',
         'tab.style': 'Style',
         'tab.layout': 'Layout',
+        'tab.general': 'General', // 添加缺失的翻译键
         'label.textContent': 'Text Content',
         'placeholder.title': 'Title',
         'placeholder.subtitle': 'Subtitle',
@@ -21,7 +22,13 @@ export const translations = {
         'label.showDecoration': 'Show Decoration',
         'button.export': 'Export PNG',
         'button.exporting': 'Exporting...',
+        'button.randomize': 'Randomize', // 添加缺失的翻译键
         'upload.text': 'Click to upload image',
+        'label.uploadImage': 'Upload Image', // 添加缺失的翻译键
+        'button.upload': 'Upload', // 添加缺失的翻译键
+        'label.backgroundColor': 'Background Color', // 添加缺失的翻译键
+        'label.pattern': 'Pattern', // 添加缺失的翻译键
+        'controls.title': 'Controls', // 添加缺失的翻译键
         'zoom.preview': 'Preview Zoom',
         'zoom.in': 'Zoom In',
         'zoom.out': 'Zoom Out',
@@ -66,6 +73,7 @@ export const translations = {
         'tab.content': '内容',
         'tab.style': '样式',
         'tab.layout': '布局',
+        'tab.general': '通用', // 添加缺失的翻译键
         'label.textContent': '文本内容',
         'placeholder.title': '标题',
         'placeholder.subtitle': '副标题',
@@ -80,7 +88,13 @@ export const translations = {
         'label.showDecoration': '显示装饰',
         'button.export': '导出 PNG',
         'button.exporting': '导出中...',
+        'button.randomize': '随机生成', // 添加缺失的翻译键
         'upload.text': '点击上传图片',
+        'label.uploadImage': '上传图片', // 添加缺失的翻译键
+        'button.upload': '上传', // 添加缺失的翻译键
+        'label.backgroundColor': '背景颜色', // 添加缺失的翻译键
+        'label.pattern': '图案', // 添加缺失的翻译键
+        'controls.title': '控制面板', // 添加缺失的翻译键
         'zoom.preview': '预览缩放',
         'zoom.in': '放大',
         'zoom.out': '缩小',

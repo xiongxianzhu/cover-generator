@@ -8,10 +8,13 @@ import { defaultCoverConfig } from './types';
 import type { Language } from './utils/i18n';
 import { t } from './utils/i18n';
 import type { AppTheme } from './types/theme';
+// 添加3D导出相关导入
+import { export3DCover } from './components/ThreeDExporter/export3d';
 
 function App() {
   const [config, setConfig] = useState<CoverConfig>(defaultCoverConfig);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloading3D, setIsDownloading3D] = useState(false); // 添加3D导出状态
   const [currentLang, setCurrentLang] = useState<Language>('zh-CN');
   const [currentTheme, setCurrentTheme] = useState<AppTheme>('cyberpunk');
   const [zoomLevel, setZoomLevel] = useState(60); // 默认60%缩放，适配移动端
@@ -167,6 +170,62 @@ function App() {
     }
   }, [config]);
 
+  // 3D导出功能
+  const handleDownload3D = useCallback(async () => {
+    if (previewRef.current === null) {
+      return;
+    }
+
+    setIsDownloading3D(true);
+    
+    try {
+      // 创建一个临时canvas来获取2D封面
+      const tempCanvas = document.createElement('canvas');
+      const ctx = tempCanvas.getContext('2d');
+      
+      if (!ctx) {
+        throw new Error('无法创建canvas上下文');
+      }
+      
+      // 设置canvas尺寸
+      tempCanvas.width = 1200;
+      tempCanvas.height = 675;
+      
+      // 使用html-to-image获取预览内容
+      const dataUrl = await toPng(previewRef.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+        quality: 0.95,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left'
+        }
+      });
+      
+      // 将数据URL绘制到临时canvas上
+      const img = new Image();
+      img.src = dataUrl;
+      
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
+      
+      ctx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
+      
+      // 调用3D导出函数
+      await export3DCover(
+        tempCanvas, 
+        config.backgroundColor, 
+        `${config.title.replace(/\s+/g, '-').toLowerCase()}-cover-3d.png`
+      );
+    } catch (error) {
+      console.error('3D导出失败:', error);
+      alert('3D导出失败，请查看控制台了解详情');
+    } finally {
+      setIsDownloading3D(false);
+    }
+  }, [config]);
+
   const handleRandomize = () => {
     const themes: CoverConfig['theme'][] = ['modern', 'classic', 'bold', 'minimal'];
     const patterns: CoverConfig['pattern'][] = ['none', 'dots', 'lines', 'waves', 'grid', 'triangles'];
@@ -224,8 +283,10 @@ function App() {
           config={config}
           handleChange={handleChange}
           onDownload={handleDownload}
-          onRandomize={handleRandomize}
+          onDownload3D={handleDownload3D} // 传递3D导出函数
           isDownloading={isDownloading}
+          isDownloading3D={isDownloading3D} // 传递3D导出状态
+          onRandomize={handleRandomize}
           currentLang={currentLang}
           currentTheme={currentTheme}
           zoomLevel={zoomLevel}

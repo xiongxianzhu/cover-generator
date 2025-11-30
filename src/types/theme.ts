@@ -1,16 +1,16 @@
 // 扁平化主题预设
 export const appThemes = {
     dark: {
-        bg: 'bg-gray-900',
-        sidebar: 'bg-gray-800',
-        border: 'border-gray-700',
+        bg: 'bg-gray-950',
+        sidebar: 'bg-gray-900',
+        border: 'border-gray-800',
         text: 'text-gray-100',
         accent: 'text-gray-300',
-        hover: 'hover:bg-gray-700',
-        button: 'bg-gray-700 hover:bg-gray-600',
-        buttonBorder: 'border-gray-600',
-        active: 'bg-gray-600 border-gray-500 text-white',
-        input: 'bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400 focus:border-gray-500 input-base'
+        hover: 'hover:bg-gray-800',
+        button: 'bg-gray-800 hover:bg-gray-700',
+        buttonBorder: 'border-gray-700',
+        active: 'bg-gray-700 border-gray-600 text-white',
+        input: 'bg-gray-800 border-gray-700 text-gray-100 placeholder:text-gray-400 focus:border-gray-600 input-base'
     },
     midnight: {
         bg: 'bg-slate-900',

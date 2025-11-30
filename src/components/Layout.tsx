@@ -93,7 +93,7 @@ export const Layout: React.FC<LayoutProps> = ({
                                         className={`w-full text-left px-4 py-2 text-sm hover:bg-white/10 transition-colors duration-150 ${currentTheme === key ? 'bg-white/15 text-white font-medium' : 'text-white/70'}`}
                                     >
                                         <span className="flex items-center gap-2">
-                                            <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-r ${key === 'cyberpunk' ? 'from-purple-500 to-pink-500' : key === 'forest' ? 'from-green-500 to-emerald-500' : key === 'ocean' ? 'from-blue-500 to-cyan-500' : key === 'sunset' ? 'from-orange-500 to-yellow-500' : key === 'aurora' ? 'from-teal-500 to-lime-500' : 'from-gray-500 to-gray-600'}`}></div>
+                                            <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-r ${key === 'cyberpunk' ? 'from-purple-500 to-pink-500' : key === 'forest' ? 'from-green-500 to-emerald-500' : key === 'ocean' ? 'from-blue-500 to-cyan-500' : key === 'sunset' ? 'from-orange-500 to-yellow-500' : key === 'aurora' ? 'from-teal-500 to-lime-500' : key === 'midnight' ? 'from-slate-600 to-slate-800' : 'from-gray-700 to-gray-900'}`}></div>
                                             {t(`theme.${key}` as TranslationKey, currentLang)}
                                         </span>
                                     </button>

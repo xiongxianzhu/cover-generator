@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import {
     Wand2,
-    Type,
-    Palette,
-    Layout,
     AlignLeft,
     AlignCenter,
     AlignRight,
@@ -33,7 +30,9 @@ interface ControlsProps {
     config: CoverConfig;
     handleChange: <K extends keyof CoverConfig>(key: K, value: CoverConfig[K]) => void;
     onDownload: () => void;
+    onDownload3D?: () => void; // 添加3D导出函数
     isDownloading: boolean;
+    isDownloading3D?: boolean; // 添加3D导出状态
     onRandomize: () => void;
     currentLang: Language;
     currentTheme: AppTheme;
@@ -49,7 +48,9 @@ export const Controls: React.FC<ControlsProps> = ({
     config,
     handleChange,
     onDownload,
+    onDownload3D, // 解构3D导出函数
     isDownloading,
+    isDownloading3D, // 解构3D导出状态
     onRandomize,
     currentLang,
     currentTheme,
@@ -79,7 +80,6 @@ export const Controls: React.FC<ControlsProps> = ({
         aspectRatio,
         backgroundType,
         gradientPreset,
-        theme,
         showAuthor,
         showIcon,
         showDecoration,
@@ -206,7 +206,6 @@ export const Controls: React.FC<ControlsProps> = ({
                                     <span className="text-xs">{icon.label}</span>
                                 </button>
                             ))}
-
                         </div>
                     </div>
                 )}
@@ -214,270 +213,276 @@ export const Controls: React.FC<ControlsProps> = ({
         );
     };
 
+    const renderStyleTab = () => {
+        return (
+            <div className="space-y-5">
+                {/* Background Type */}
+                <div className="space-y-3">
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                        {t('label.background', currentLang)}
+                    </label>
+                    <div className="grid grid-cols-3 gap-1 xs:gap-2">
+                        {['solid', 'gradient', 'image'].map((type) => (
+                            <button
+                                key={type}
+                                onClick={() => handleChange('backgroundType', type as CoverConfig['backgroundType'])}
+                                className={`px-2 py-1.5 rounded border transition-colors duration-150 text-xs xs:text-sm ${
+                                    backgroundType === type
+                                        ? 'bg-white/15 text-white font-medium border-white/20'
+                                        : 'text-white/70 border-white/10 bg-white/5 hover:bg-white/10 hover:text-white'
+                                }`}
+                            >
+                                {t(`bg.${type}` as TranslationKey, currentLang)}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Color Picker - Solid */}
+                {backgroundType === 'solid' && (
+                    <div className="space-y-3">
+                        <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                            {t('label.backgroundColor', currentLang)}
+                        </label>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="color"
+                                value={backgroundColor}
+                                onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                                className="w-10 h-10 cursor-pointer rounded border border-neutral-600 bg-neutral-800"
+                            />
+                            <input
+                                type="text"
+                                value={backgroundColor}
+                                onChange={(e) => handleChange('backgroundColor', e.target.value)}
+                                className={`flex-1 ${appTheme.input} rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                                placeholder="#000000"
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {/* Gradient Preset */}
+                {backgroundType === 'gradient' && (
+                    <div className="space-y-3">
+                        <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                            渐变预设
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                            {Object.entries({
+                                sunset: '日落',
+                                ocean: '海洋',
+                                forest: '森林',
+                                candy: '糖果',
+                                aurora: '极光',
+                                flame: '火焰',
+                                custom: '自定义'
+                            }).map(([preset, label]) => (
+                                <button
+                                    key={preset}
+                                    onClick={() => handleChange('gradientPreset', preset as CoverConfig['gradientPreset'])}
+                                    className={`p-2 rounded border transition-all duration-200 ${
+                                        gradientPreset === preset
+                                            ? `${appTheme.active} shadow-md`
+                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
+                                    }`}
+                                >
+                                    <span className="text-xs">{label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Image Upload */}
+                {backgroundType === 'image' && (
+                    <div className="space-y-3">
+                        <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                            {t('label.uploadImage', currentLang)}
+                        </label>
+                        <label className={`flex flex-col items-center justify-center p-4 ${appTheme.button} ${appTheme.buttonBorder} rounded border-2 border-dashed cursor-pointer transition-all duration-200 hover:shadow-md`}>
+                            <Upload size={24} className="mb-2" />
+                            <span className="text-sm font-medium">{t('button.upload', currentLang)}</span>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="hidden"
+                            />
+                        </label>
+                    </div>
+                )}
+
+                {/* Pattern Overlay */}
+                <div className="space-y-3">
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>
+                        {t('label.pattern', currentLang)}
+                    </label>
+                    <div className="grid grid-cols-3 gap-1 xs:gap-2">
+                        {['none', 'dots', 'lines', 'waves', 'grid', 'triangles'].map((pat) => (
+                            <button
+                                key={pat}
+                                onClick={() => handleChange('pattern', pat as CoverConfig['pattern'])}
+                                className={`px-2 py-1.5 rounded border transition-colors duration-150 text-xs xs:text-sm ${
+                                    pattern === pat
+                                        ? 'bg-white/15 text-white font-medium border-white/20'
+                                        : 'text-white/70 border-white/10 bg-white/5 hover:bg-white/10 hover:text-white'
+                                }`}
+                            >
+                                {t(`pattern.${pat}` as TranslationKey, currentLang)}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const renderLayoutTab = () => {
+        return (
+            <div className="space-y-5">
+                {/* Aspect Ratio */}
+                <div className="space-y-3">
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.aspectRatio', currentLang)}</label>
+                    <div className="grid grid-cols-3 gap-2">
+                        <button
+                            onClick={() => handleChange('aspectRatio', '16:9')}
+                            className={`p-3.5 rounded border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '16:9' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
+                        >
+                            <Monitor size={20} className={aspectRatio === '16:9' ? 'text-purple-400' : ''} />
+                            <span className={`text-xs font-medium ${aspectRatio === '16:9' ? 'text-purple-200' : 'text-neutral-400'}`}>16:9</span>
+                        </button>
+                        <button
+                            onClick={() => handleChange('aspectRatio', '1:1')}
+                            className={`p-3.5 rounded border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '1:1' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
+                        >
+                            <Instagram size={20} className={aspectRatio === '1:1' ? 'text-purple-400' : ''} />
+                            <span className={`text-xs font-medium ${aspectRatio === '1:1' ? 'text-purple-200' : 'text-neutral-400'}`}>1:1</span>
+                        </button>
+                        <button
+                            onClick={() => handleChange('aspectRatio', '9:16')}
+                            className={`p-3.5 rounded border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '9:16' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
+                        >
+                            <Smartphone size={20} className={aspectRatio === '9:16' ? 'text-purple-400' : ''} />
+                            <span className={`text-xs font-medium ${aspectRatio === '9:16' ? 'text-purple-200' : 'text-neutral-400'}`}>9:16</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="space-y-3">
+                    <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.visibility', currentLang)}</label>
+                    <div className="space-y-2">
+                        <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                            <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showAuthor', currentLang)}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleChange('showAuthor', !showAuthor)}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                    showAuthor ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
+                                }`}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
+                                        showAuthor ? 'translate-x-6' : 'translate-x-1'
+                                    }`}
+                                />
+                            </button>
+                        </label>
+                        <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                            <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showIcon', currentLang)}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleChange('showIcon', !showIcon)}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                    showIcon ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
+                                }`}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
+                                        showIcon ? 'translate-x-6' : 'translate-x-1'
+                                    }`}
+                                />
+                            </button>
+                        </label>
+                        <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                            <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showDecoration', currentLang)}</span>
+                            <button
+                                type="button"
+                                onClick={() => handleChange('showDecoration', !showDecoration)}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                    showDecoration ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
+                                }`}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
+                                        showDecoration ? 'translate-x-6' : 'translate-x-1'
+                                    }`}
+                                />
+                            </button>
+                        </label>
+                        {/* 3D Effect Toggle */}
+                        <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
+                            <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">3D效果</span>
+                            <button
+                                type="button"
+                                onClick={() => handleChange('enable3DEffect', !config.enable3DEffect)}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
+                                    config.enable3DEffect ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
+                                }`}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
+                                        config.enable3DEffect ? 'translate-x-6' : 'translate-x-1'
+                                    }`}
+                                />
+                            </button>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     return (
-        <div className={`flex flex-col h-full ${appTheme.sidebar} ${appTheme.text} glass-effect`}>
-            {/* Magic Button */}
+        <div className={`h-full flex flex-col ${appTheme.sidebar}`}>
+            {/* Header */}
             <div className={`p-4 border-b ${appTheme.border}`}>
-                <button
-                    onClick={onRandomize}
-                    className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:from-purple-500 hover:via-blue-500 hover:to-cyan-500 text-white font-semibold py-3 px-4 rounded flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-purple-900/20 hover:shadow-purple-900/30 group transform hover:scale-[1.02] active:scale-[0.98] backdrop-blur-sm"
-                >
-                    <Wand2 size={18} className="group-hover:rotate-12 transition-transform duration-300" />
-                    {t('magic.button', currentLang)}
-                </button>
+                <div className="flex items-center justify-between">
+                    <h2 className={`text-lg font-bold ${appTheme.text}`}>{t('controls.title', currentLang)}</h2>
+                    <button
+                        onClick={onRandomize}
+                        className={`p-2 ${appTheme.button} rounded-full ${appTheme.buttonBorder} transition-all duration-200 hover:shadow-md`}
+                        title={t('button.randomize', currentLang)}
+                    >
+                        <Wand2 size={18} />
+                    </button>
+                </div>
             </div>
 
             {/* Tabs */}
-            <div className={`flex border-b ${appTheme.border}`}>
-                <button
-                    onClick={() => setActiveTab('general')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'general' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'}`}
-                >
-                    <Type size={16} className={activeTab === 'general' ? 'text-purple-400' : ''} />
-                    {t('tab.content', currentLang)}
-                </button>
-                <button
-                    onClick={() => setActiveTab('style')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'style' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : `${appTheme.text} opacity-70 hover:${appTheme.text}/80 hover:bg-neutral-800/30`}`}
-                >
-                    <Palette size={16} className={activeTab === 'style' ? 'text-purple-400' : ''} />
-                    {t('tab.style', currentLang)}
-                </button>
-                <button
-                    onClick={() => setActiveTab('layout')}
-                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-200 ${activeTab === 'layout' ? `${appTheme.text} border-b-2 ${appTheme.accent.replace('text-', 'border-')} bg-gradient-to-b from-transparent to-purple-600/10` : `${appTheme.text} opacity-70 hover:${appTheme.text}/80 hover:bg-neutral-800/30`}`}
-                >
-                    <Layout size={16} className={activeTab === 'layout' ? 'text-purple-400' : ''} />
-                    {t('tab.layout', currentLang)}
-                </button>
+            <div className={`border-b ${appTheme.border}`}>
+                <div className="flex">
+                    {(['general', 'style', 'layout'] as const).map(tab => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                                activeTab === tab
+                                    ? `${appTheme.active} ${appTheme.text}`
+                                    : `bg-gray-700 ${appTheme.text} hover:${appTheme.text}/80`
+                            }`}
+                        >
+                            {t(`tab.${tab}`, currentLang)}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto p-2 xs:p-4 sm:p-6 space-y-4 xs:space-y-6 custom-scrollbar">
-
-                {/* General Tab */}
+            {/* Tab Content */}
+            <div className="flex-1 overflow-y-auto p-4">
                 {activeTab === 'general' && renderGeneralTab()}
-
-                {/* Style Tab */}
-                {activeTab === 'style' && (
-                    <div className="space-y-5">
-                        <div className="space-y-3">
-                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.background', currentLang)}</label>
-                            <div className="grid grid-cols-2 gap-2">
-                                {['solid', 'gradient', 'pattern', 'image'].map((type) => (
-                                    <button
-                                        key={type}
-                                        onClick={() => handleChange('backgroundType', type as CoverConfig['backgroundType'])}
-                                        className={`px-4 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${backgroundType === type
-                                            ? `${appTheme.active} shadow-lg scale-[1.02] border-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`
-                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
-                                            }`}
-                                    >
-                                        {t(`bg.${type}` as TranslationKey, currentLang)}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {backgroundType === 'image' ? (
-                                <div className="file-upload-wrapper">
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        className="file-upload-input"
-                                        id="bg-upload"
-                                    />
-                                    <label
-                                        htmlFor="bg-upload"
-                                        className={`file-upload-label input-${currentTheme} glass-effect border-2 ${appTheme.border} hover:${appTheme.accent}/20 hover:border-${appTheme.accent.replace('text-', '').replace('-400', '-500')} group`}
-                                    >
-                                        <Upload size={24} className={`text-neutral-500 mb-2 group-hover:${appTheme.accent} transition-colors duration-200`} />
-                                        <span className="text-xs text-neutral-400 group-hover:text-neutral-300 transition-colors duration-200">{t('upload.text', currentLang)}</span>
-                                    </label>
-                                </div>
-                            ) : (
-                                <>
-                                    {backgroundType === 'gradient' && (
-                                        <div className="space-y-3">
-                                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>渐变预设</label>
-                                            <div className="grid grid-cols-2 gap-2">
-                                                {['custom', 'sunset', 'ocean', 'forest', 'candy', 'aurora', 'flame'].map((preset) => (
-                                                    <button
-                                                        key={preset}
-                                                        onClick={() => handleChange('gradientPreset', preset as CoverConfig['gradientPreset'])}
-                                                        className={`px-3 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${gradientPreset === preset
-                                                            ? `${appTheme.active} shadow-lg scale-[1.02]`
-                                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
-                                                            }`}
-                                                    >
-                                                        {t(`gradient.${preset}` as TranslationKey, currentLang)}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                    {(backgroundType === 'solid' || (backgroundType === 'gradient' && gradientPreset === 'custom')) && (
-                                        <div className={`flex items-center gap-3 ${appTheme.button} p-3 rounded ${appTheme.buttonBorder} shadow-sm hover:shadow-md transition-all duration-200 group`}>
-                                            <div className="color-picker-wrapper">
-                                                <input
-                                                    type="color"
-                                                    value={backgroundColor}
-                                                    onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                                                    className={`color-picker-input ${appTheme.accent.replace('text-', 'border-').replace('-400', '-500')} hover:${appTheme.accent.replace('text-', 'border-').replace('-400', '-500')} focus:ring-${appTheme.accent.replace('text-', '').replace('-400', '-500')}`}
-                                                />
-                                                <div className="absolute inset-0 rounded pointer-events-none" style={{ backgroundColor, opacity: 0.2 }}></div>
-                                            </div>
-                                            <span className={`text-sm ${appTheme.accent} font-mono font-medium group-hover:scale-[1.02] transition-transform duration-200`}>{backgroundColor}</span>
-                                        </div>
-                                    )}
-                                </>
-                            )}
-
-                        {/* Pattern Selection */}
-                        {backgroundType !== 'image' && (
-                            <div className="space-y-3">
-                                <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>几何纹理</label>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {['none', 'dots', 'lines', 'waves', 'grid', 'triangles'].map((p) => (
-                                        <button
-                                            key={p}
-                                            onClick={() => handleChange('pattern', p as CoverConfig['pattern'])}
-                                            className={`px-3 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${pattern === p
-                                                ? `${appTheme.active} shadow-lg scale-[1.02]`
-                                                : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
-                                                }`}
-                                        >
-                                            {t(`pattern.${p}` as TranslationKey, currentLang)}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                        </div>
-
-                        <div className="space-y-3">
-                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.theme', currentLang)}</label>
-                            <div className="grid grid-cols-2 gap-2">
-                                {['modern', 'classic', 'bold', 'minimal'].map((tVal) => (
-                                    <button
-                                        key={tVal}
-                                        onClick={() => handleChange('theme', tVal as CoverConfig['theme'])}
-                                        className={`px-3 py-2.5 rounded text-sm font-medium border transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${theme === tVal
-                                            ? `${appTheme.active} shadow-lg scale-[1.02]`
-                                            : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`
-                                            }`}
-                                    >
-                                        {t(`theme.${tVal}` as TranslationKey, currentLang)}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Layout Tab */}
-                {activeTab === 'layout' && (
-                    <div className="space-y-5">
-                        <div className="space-y-3">
-                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.aspectRatio', currentLang)}</label>
-                            <div className="grid grid-cols-3 gap-2">
-                                <button
-                                    onClick={() => handleChange('aspectRatio', '16:9')}
-                                    className={`p-3.5 rounded border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '16:9' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
-                                >
-                                    <Monitor size={20} className={aspectRatio === '16:9' ? 'text-purple-400' : ''} />
-                                    <span className={`text-xs font-medium ${aspectRatio === '16:9' ? 'text-purple-200' : 'text-neutral-400'}`}>16:9</span>
-                                </button>
-                                <button
-                                    onClick={() => handleChange('aspectRatio', '1:1')}
-                                    className={`p-3.5 rounded border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '1:1' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
-                                >
-                                    <Instagram size={20} className={aspectRatio === '1:1' ? 'text-purple-400' : ''} />
-                                    <span className={`text-xs font-medium ${aspectRatio === '1:1' ? 'text-purple-200' : 'text-neutral-400'}`}>1:1</span>
-                                </button>
-                                <button
-                                    onClick={() => handleChange('aspectRatio', '9:16')}
-                                    className={`p-3.5 rounded border flex flex-col items-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] ${aspectRatio === '9:16' ? `${appTheme.active} shadow-lg scale-[1.02]` : `${appTheme.button} ${appTheme.buttonBorder} ${appTheme.text} hover:${appTheme.text}/80 hover:shadow-md`}`}
-                                >
-                                    <Smartphone size={20} className={aspectRatio === '9:16' ? 'text-purple-400' : ''} />
-                                    <span className={`text-xs font-medium ${aspectRatio === '9:16' ? 'text-purple-200' : 'text-neutral-400'}`}>9:16</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            <label className={`text-xs font-semibold ${appTheme.text} uppercase tracking-wider opacity-70`}>{t('label.visibility', currentLang)}</label>
-                            <div className="space-y-2">
-                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
-                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showAuthor', currentLang)}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleChange('showAuthor', !showAuthor)}
-                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
-                                            showAuthor ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
-                                        }`}
-                                    >
-                                        <span
-                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
-                                                showAuthor ? 'translate-x-6' : 'translate-x-1'
-                                            }`}
-                                        />
-                                    </button>
-                                </label>
-                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
-                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showIcon', currentLang)}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleChange('showIcon', !showIcon)}
-                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
-                                            showIcon ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
-                                        }`}
-                                    >
-                                        <span
-                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
-                                                showIcon ? 'translate-x-6' : 'translate-x-1'
-                                            }`}
-                                        />
-                                    </button>
-                                </label>
-                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
-                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showDecoration', currentLang)}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleChange('showDecoration', !showDecoration)}
-                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
-                                            showDecoration ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
-                                        }`}
-                                    >
-                                        <span
-                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
-                                                showDecoration ? 'translate-x-6' : 'translate-x-1'
-                                            }`}
-                                        />
-                                    </button>
-                                </label>
-                                {/* 3D Effect Toggle */}
-                                <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
-                                    <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">3D效果</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleChange('enable3DEffect', !config.enable3DEffect)}
-                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
-                                            config.enable3DEffect ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
-                                        }`}
-                                    >
-                                        <span
-                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
-                                                config.enable3DEffect ? 'translate-x-6' : 'translate-x-1'
-                                            }`}
-                                        />
-                                    </button>
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-                )}
+                {activeTab === 'style' && renderStyleTab()}
+                {activeTab === 'layout' && renderLayoutTab()}
             </div>
 
             {/* Zoom Controls */}
@@ -520,6 +525,23 @@ export const Controls: React.FC<ControlsProps> = ({
 
             {/* Footer Actions */}
             <div className={`p-4 border-t ${appTheme.border}`}>
+                {/* 3D导出按钮 */}
+                {onDownload3D && (
+                    <button
+                        onClick={onDownload3D}
+                        disabled={isDownloading3D}
+                        className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-bold py-3 px-4 rounded mb-3 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                    >
+                        {isDownloading3D ? (
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                            <Download size={18} />
+                        )}
+                        {isDownloading3D ? "正在导出3D..." : "导出3D封面"}
+                    </button>
+                )}
+                
+                {/* 2D导出按钮 */}
                 <button
                     onClick={onDownload}
                     disabled={isDownloading}
