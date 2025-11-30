@@ -259,7 +259,8 @@ function App() {
     // 随机设置显示选项
     const showAuthor = Math.random() > 0.3; // 70% chance to show author
     const showIcon = Math.random() > 0.3; // 70% chance to show icon
-    const showDecoration = Math.random() > 0.3; // 70% chance to show decoration
+    // 对于minimal主题，默认不显示装饰
+    const showDecoration = randomTheme === 'minimal' ? false : Math.random() > 0.3; // 70% chance to show decoration
     // 10% chance to enable 3D effect
     const enable3DEffect = Math.random() > 0.9;
 
@@ -280,6 +281,16 @@ function App() {
   };
 
   const handleChange = <K extends keyof CoverConfig>(key: K, value: CoverConfig[K]) => {
+    // 当主题切换到minimal时，自动将showDecoration设置为false
+    if (key === 'theme' && value === 'minimal') {
+      setConfig(prev => ({
+        ...prev,
+        [key]: value,
+        showDecoration: false
+      }));
+      return;
+    }
+
     setConfig(prev => ({ ...prev, [key]: value }));
   };
 

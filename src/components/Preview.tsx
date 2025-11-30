@@ -326,7 +326,7 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>(({ config, zoomLevel
                             </div>
                         )}
                     </div>
-                    {showDecoration && (
+                    {showDecoration && config.theme !== 'minimal' && (
                         <div className={themeStyles.decoration}>
                             <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
                             <div className="w-2 h-2 rounded-full bg-current sm:w-3 sm:h-3" />
@@ -367,7 +367,7 @@ export const Preview = forwardRef<PreviewRef, PreviewProps>(({ config, zoomLevel
                                 </div>
                             )}
                         </div>
-                        {showDecoration && themeStyles.decorationIcon !== 'hidden' && (
+                        {showDecoration && config.theme !== 'minimal' && themeStyles.decorationIcon !== 'hidden' && (
                             <div className={themeStyles.decorationIcon}>
                                 <IconComponent size={36} />
                             </div>

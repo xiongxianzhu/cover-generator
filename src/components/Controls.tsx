@@ -61,6 +61,7 @@ export const Controls: React.FC<ControlsProps> = ({
 }) => {
     const appTheme = appThemes[currentTheme];
     const [activeTab, setActiveTab] = useState<Tab>('general');
+    const [showMinimalThemeAlert, setShowMinimalThemeAlert] = useState(false);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -435,18 +436,37 @@ export const Controls: React.FC<ControlsProps> = ({
                             <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.showDecoration', currentLang)}</span>
                             <button
                                 type="button"
-                                onClick={() => handleChange('showDecoration', !showDecoration)}
+                                onClick={() => {
+                                    if (config.theme === 'minimal') {
+                                        // 当主题为极简时，显示提示信息
+                                        setShowMinimalThemeAlert(true);
+                                        // 3秒后自动隐藏提示
+                                        setTimeout(() => {
+                                            setShowMinimalThemeAlert(false);
+                                        }, 3000);
+                                    } else {
+                                        handleChange('showDecoration', !showDecoration);
+                                    }
+                                }}
+                                disabled={config.theme === 'minimal'}
                                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-800 shadow-sm ${
-                                    showDecoration ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' : 'bg-neutral-600'
-                                }`}
+                                    showDecoration && config.theme !== 'minimal' 
+                                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 shadow-purple-900/30' 
+                                        : 'bg-neutral-600'
+                                } ${config.theme === 'minimal' ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 <span
                                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 shadow-md ${
-                                        showDecoration ? 'translate-x-6' : 'translate-x-1'
+                                        showDecoration && config.theme !== 'minimal' ? 'translate-x-6' : 'translate-x-1'
                                     }`}
                                 />
                             </button>
                         </label>
+                        {showMinimalThemeAlert && (
+                            <div className="mt-2 p-2 bg-amber-900/50 border border-amber-700 rounded text-amber-200 text-xs">
+                                {t('alert.minimalThemeNoDecoration', currentLang)}
+                            </div>
+                        )}
                         {/* 3D Effect Toggle */}
                         <label className={`flex items-center justify-between p-3.5 ${appTheme.button} rounded ${appTheme.buttonBorder} cursor-pointer ${appTheme.hover} transition-all duration-200 group hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]`}>
                             <span className="text-sm font-medium text-neutral-300 group-hover:text-neutral-200">{t('label.enable3DEffect', currentLang)}</span>

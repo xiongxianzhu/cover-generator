@@ -75,6 +75,8 @@ export const translations = {
         'theme.sunset': 'Sunset',
         'theme.aurora': 'Aurora',
         'footer.blog': 'Blog',
+        // 添加极简主题装饰提示
+        'alert.minimalThemeNoDecoration': 'Minimal theme does not support decoration display',
     },
     'zh-CN': {
         'app.title': '封面生成器',
@@ -150,6 +152,8 @@ export const translations = {
         'theme.sunset': '日落',
         'theme.aurora': '极光',
         'footer.blog': '博客',
+        // 添加极简主题装饰提示
+        'alert.minimalThemeNoDecoration': '极简主题不支持显示装饰元素',
     }
 };
 
